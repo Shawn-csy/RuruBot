@@ -1,0 +1,62 @@
+import sys
+import os
+
+# 添加專案根目錄到 Python 路徑
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from fastapi import FastAPI, Request
+import uvicorn
+from dotenv import load_dotenv
+from linebot.v3 import WebhookHandler
+from linebot.v3.exceptions import InvalidSignatureError
+from linebot.v3.messaging import (
+    Configuration, ApiClient, MessagingApi, ReplyMessageRequest,
+    TextMessage, ImageMessage
+)
+from linebot.v3.webhooks import MessageEvent, TextMessageContent
+
+import os
+from services.linebot_reply.command_handler import handle_command, parse_command
+from services.linebot_reply.reply_service import ReplyService
+
+#測試使用 正式版移除
+import sys
+sys.stdout.flush()
+
+load_dotenv()
+
+app = FastAPI()
+handler = WebhookHandler(os.getenv("CHANNEL_SECRET"))
+configuration = Configuration(access_token=os.getenv("CHANNEL_ACCESS_TOKEN"))
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello, World!"}
+
+@app.post("/callback")
+async def callback(request: Request):
+    body_bytes = await request.body()
+    body = body_bytes.decode('utf-8')
+    signature = request.headers.get("X-Line-Signature")
+    handler.handle(body, signature)
+    return "OK"
+
+@handler.add(MessageEvent, message=TextMessageContent)
+def handle_message(event):
+    # 測試訊息
+    if event.reply_token == "nHuyWiB7yP5Zw52FIkcQobQuGDXCTA":
+        print("檢測到測試訊息，跳過回覆")
+        return
+    
+    # 1. 解析命令
+    command, params = parse_command(event.message.text)
+    # 2. 執行命令獲取結果
+    result = handle_command(command, params)
+    # 3. 使用統一的回覆服務發送回覆
+    reply_service = ReplyService(configuration)
+    reply_service.reply(event.reply_token, result)
+
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8080)
