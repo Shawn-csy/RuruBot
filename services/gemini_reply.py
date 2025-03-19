@@ -1,8 +1,7 @@
 from google import genai
 import os
 from dotenv import load_dotenv
-from services.get_tickets import locat_ticket
-import random
+
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
@@ -17,5 +16,3 @@ def get_gemini_reply(prompt):
     
     )
     return response.text
-
-

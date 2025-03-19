@@ -2,27 +2,14 @@ from services.radar import radar
 from services.astro import get_astro_info
 from typing import Dict, Any, Union
 from services.constants import astro as astro_dict
-from services.linebot_reply.process_reply_data import process_astro_bubble_reply, process_ticket_reply
+from services.linebot_reply.process_reply_data import process_astro_bubble_reply, process_ticket_reply, process_podcast_reply
 from services.get_tickets import locat_ticket
+from services.get_podcast import get_podcast
 import random
+from services.linebot_reply.parse_command import parse_command
+import re
 
-def parse_command(text):
-    """解析用戶輸入的命令和參數"""
-    #雷達功能
-    if "雷達" in text or "radar" in text.lower():
-        return "radar", {}
-    #星座功能,用-w 取每周星座, 不加-w 取每日星座
-    if "-w" in text and text.replace("-w", "").strip() in astro_dict:
-        text = text.replace("-w", "").strip()
-        return "astro", {"astro_name": text, "type": "weekly"}
-    elif text in astro_dict:
-        return "astro", {"astro_name": text, "type": "daily"}
-    #籤詩功能
-    elif "抽淺草寺" in text:
-        return "ticket", {"text": text}
-    else:
-        return "echo", {"text": text}
-
+dice_pattern = re.compile(r'^(\d+)d(\d+)$', re.IGNORECASE)
 
 
 def handle_command(command: str, params: Dict[str, Any]) -> Dict[str, Any]:
@@ -74,15 +61,12 @@ def handle_command(command: str, params: Dict[str, Any]) -> Dict[str, Any]:
             "type": "flex",
             "data": reply
         }
-    
-    elif command == "echo":
+    elif command == "podcast":
+        podcast = get_podcast()
+        reply = process_podcast_reply(podcast)
         return {
-            "type": "text",
-            "data": params.get("text", "")
+            "type": "flex",
+            "data": reply
         }
     
-    else:
-        return {
-            "type": "text",
-            "data": "抱歉，我不明白這個命令"
-        } 
+    

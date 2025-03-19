@@ -7,10 +7,10 @@ def create_ticket_bubble(title, type, poem, explain, result, img_url, ai_result)
         {
             "type": "text",
             "text": line,
-            "size": "md",
-            "weight": "bold",
+            "size": "sm",
+            "weight": "regular",
             "wrap": True,
-            "color": "#000000",
+            "color": "#555555",
             "margin": "sm",
             "align": "center"
         }
@@ -19,7 +19,23 @@ def create_ticket_bubble(title, type, poem, explain, result, img_url, ai_result)
     
     flex_container = {
         "type": "bubble",
-        "size": "mega",
+        "size": "kilo",
+        "header": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "text",
+                    "text": title,
+                    "weight": "bold",
+                    "size": "md",
+                    "align": "center",
+                    "color": "#FFFFFF"
+                }
+            ],
+            "backgroundColor": "#4A3B6B",
+            "paddingAll": "md"
+        },
         "hero": {
             "type": "image",
             "url": img_url,
@@ -30,80 +46,125 @@ def create_ticket_bubble(title, type, poem, explain, result, img_url, ai_result)
         "body": {
             "type": "box",
             "layout": "vertical",
-            "spacing": "md",
+            "spacing": "sm",
+            "backgroundColor": "#F8F8F8",
             "contents": [
                 {
-                    "type": "text",
-                    "text": title,
-                    "weight": "bold",
-                    "size": "lg",
-                    "align": "center",
-                    "wrap": True,
-                    "color": "#1DB446"
-                },
-                {
-                    "type": "separator",
-                    "margin": "md"
+                    "type": "box",
+                    "layout": "vertical",
+                    "backgroundColor": "#FFFFFF",
+                    "cornerRadius": "md",
+                    "paddingAll": "md",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": type,
+                            "size": "md",
+                            "weight": "bold",
+                            "wrap": True,
+                            "color": "#4A3B6B",
+                            "align": "center"
+                        },
+                        *poem_contents
+                    ]
                 },
                 {
                     "type": "box",
                     "layout": "vertical",
-                    "margin": "md",
-                    "spacing": "sm",
+                    "backgroundColor": "#FFFFFF",
+                    "cornerRadius": "md",
+                    "paddingAll": "md",
+                    "margin": "sm",
                     "contents": [
                         {
                             "type": "text",
-                            "text": f"{type}",
-                            "size": "xl",
-                            "wrap": True,
-                            "color": "#555555",
-                            "align": "center"
+                            "text": "解釋",
+                            "size": "xs",
+                            "color": "#aaaaaa",
+                            "weight": "bold"
                         },
-                        *poem_contents,  # 插入詩句內容
                         {
                             "type": "text",
-                            "text": f"解釋：{explain}",
+                            "text": explain,
                             "size": "sm",
                             "wrap": True,
-                            "color": "#555555"
+                            "color": "#555555",
+                            "margin": "sm"
                         }
                     ]
                 },
                 {
-                    "type": "text",
-                    "text": f"結果：{result}",
-                    "size": "sm",
-                        "weight": "bold",
-                        "align": "center",
-                    "wrap": True,
-                    "color": "#000000"
+                    "type": "box",
+                    "layout": "vertical",
+                    "backgroundColor": "#FFFFFF",
+                    "cornerRadius": "md",
+                    "paddingAll": "md",
+                    "margin": "sm",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "結果",
+                            "size": "xs",
+                            "color": "#aaaaaa",
+                            "weight": "bold"
+                        },
+                        {
+                            "type": "text",
+                            "text": result,
+                            "size": "sm",
+                            "wrap": True,
+                            "color": "#4A3B6B",
+                            "weight": "bold",
+                            "align": "center",
+                            "margin": "sm"
+                        }
+                    ]
                 },
                 {
-                    "type": "text",
-                    "text": f"露露開示：{ai_result}",
-                    "size": "sm",
-                    "wrap": True,
-                    "color": "#555555"
+                    "type": "box",
+                    "layout": "vertical",
+                    "backgroundColor": "#FFFFFF",
+                    "cornerRadius": "md",
+                    "paddingAll": "md",
+                    "margin": "sm",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "露露開示",
+                            "size": "xs",
+                            "color": "#aaaaaa",
+                            "weight": "bold"
+                        },
+                        {
+                            "type": "text",
+                            "text": ai_result,
+                            "size": "sm",
+                            "wrap": True,
+                            "color": "#555555",
+                            "margin": "sm"
+                        }
+                    ]
                 }
             ]
         },
         "footer": {
             "type": "box",
             "layout": "vertical",
-            "spacing": "sm",
+            "backgroundColor": "#4A3B6B",
+            "paddingAll": "sm",
             "contents": [
                 {
                     "type": "button",
                     "style": "link",
                     "height": "sm",
+                    "color": "#FFFFFF",
                     "action": {
                         "type": "uri",
                         "label": "取得籤詩",
                         "uri": f"{img_url}"
                     }
                 }
-            ],
-            "flex": 0
+            ]
         }
     }
     return flex_container

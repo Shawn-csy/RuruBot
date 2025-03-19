@@ -11,7 +11,8 @@ def locat_ticket (rndNum):
         for key, value in result_dict.items():
             formatted_results.append(f"{key}：{value}")
         return "\n".join(formatted_results)
-
+    
+    # 本地讀取籤詩
     current_dir = os.path.dirname(os.path.abspath(__file__))
     json_path = os.path.join(current_dir, '..', 'statics', 'light_grass_poem.json')
     with open(json_path,'r',encoding='utf-8') as fate :

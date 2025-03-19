@@ -1,5 +1,6 @@
 from layout.astro_bubble import create_astro_bubble
 from layout.ticket_bubble import create_ticket_bubble
+from layout.podcast_bubble import create_podcast_bubble
 from linebot.v3.messaging import FlexMessage, FlexContainer
 from services.gemini_reply import get_gemini_reply
 import re
@@ -127,3 +128,78 @@ def process_ticket_reply(data,text):
         contents=flex_container
     )
     return flex_message
+
+def process_podcast_reply(data):
+    # 確保資料是字串
+    if isinstance(data, list) and len(data) > 0:
+        data = data[0]
+    
+    if not isinstance(data, str):
+        
+        return FlexMessage(
+            alt_text='本週星座運勢',
+            contents=FlexContainer.from_dict({
+                "type": "bubble",
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "無法解析星座運勢資料",
+                            "weight": "bold"
+                        }
+                    ]
+                }
+            })
+        )
+    
+    # 解析標題和日期
+    lines = data.strip().split('\n')
+    title = lines[0].strip()
+    
+    # 初始化運勢分類
+    fortune_groups = {
+        "累的": [],
+        "穩的": [],
+        "讚的": []
+    }
+    
+    current_group = None
+    
+    # 解析各星座運勢
+    for line in lines:
+        line = line.strip()
+        # 跳過空行
+        if not line:
+            continue
+        
+        # 檢查是否是分類標題
+        if "【" in line and "】" in line:
+            for group in fortune_groups.keys():
+                if group in line:
+                    current_group = group
+                    print(f"找到分類: {current_group}")
+                    break
+            continue
+        
+        # 解析星座運勢
+        if current_group and "：" in line:
+            parts = line.split("：", 1)
+            if len(parts) == 2:
+                sign, fortune = parts
+                fortune_groups[current_group].append({
+                    "sign": sign.strip(),
+                    "fortune": fortune.strip()
+                })
+        
+    
+    # 使用 create_podcast_bubble 創建 bubble
+    bubble = create_podcast_bubble(title, fortune_groups)
+    
+    return FlexMessage(
+        alt_text='本週星座運勢',
+        contents=FlexContainer.from_dict(bubble)
+    )
+
+  
