@@ -8,15 +8,14 @@ from fastapi import FastAPI, Request
 import uvicorn
 from dotenv import load_dotenv
 from linebot.v3 import WebhookHandler
-from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging import (
-    Configuration, ApiClient, MessagingApi, ReplyMessageRequest,
-    TextMessage, ImageMessage
+    Configuration,
 )
 from linebot.v3.webhooks import MessageEvent, TextMessageContent
 
 import os
-from services.linebot_reply.command_handler import handle_command, parse_command
+from services.linebot_reply.command_handler import handle_command
+from services.linebot_reply.parse_command import parse_command
 from services.linebot_reply.reply_service import ReplyService
 
 #測試使用 正式版移除
@@ -48,11 +47,8 @@ def handle_message(event):
         print("檢測到測試訊息，跳過回覆")
         return
     
-    # 1. 解析命令
     command, params = parse_command(event.message.text)
-    # 2. 執行命令獲取結果
     result = handle_command(command, params)
-    # 3. 使用統一的回覆服務發送回覆
     reply_service = ReplyService(configuration)
     reply_service.reply(event.reply_token, result)
 

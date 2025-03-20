@@ -13,7 +13,11 @@ class ReplyService:
         self.line_bot_api = MessagingApi(self.api_client)
     
     def reply(self, reply_token: str, result: Dict[str, Any]) -> None:
-
+        """統一的回覆服務"""
+        # 如果結果為 None，不進行任何回覆
+        if result is None:
+            return
+        
         result_type = result.get("type", "text")
         data = result.get("data", "")
         
@@ -27,8 +31,6 @@ class ReplyService:
             self._reply_flex(reply_token, data)
         elif result_type == "mixed":
             self._reply_mixed(reply_token, data)
-        else:
-            self._reply_text(reply_token, "不支援的回覆類型")
     
     def _reply_text(self, reply_token: str, text: str) -> None:
         """發送文字回覆"""

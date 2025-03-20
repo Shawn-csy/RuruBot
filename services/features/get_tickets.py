@@ -1,7 +1,9 @@
 
 import os
 import json
-
+import requests
+from bs4 import BeautifulSoup
+import random
 
 
 #基本的抽淺草寺功能
@@ -14,7 +16,7 @@ def locat_ticket (rndNum):
     
     # 本地讀取籤詩
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    json_path = os.path.join(current_dir, '..', 'statics', 'light_grass_poem.json')
+    json_path = os.path.join(current_dir, '../../', 'statics', 'light_grass_poem.json')
     with open(json_path,'r',encoding='utf-8') as fate :
         content = fate.read()
         fate_data = json.loads(content)
@@ -31,3 +33,23 @@ def locat_ticket (rndNum):
 
     return ticketData
 
+#抽台北市六十甲子籤
+def get_sixty_poem():
+    hit = random.randint(1, 61)
+    url = f"https://iwnet.civil.taipei/SignedPoetry/Home/Detail/{hit}"
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, 'html.parser')
+
+    poetry_div = soup.find('div', class_='main-poetry')
+    poetry_text = poetry_div.get_text('\n', strip=True)
+    process_text = [i.split('\n') for i in poetry_text.split('-')]
+    process_data = []
+    for i in process_text:
+        for j in range(len(i)):
+            process_data.append(i[j])
+
+    res = '\n'.join(process_data)
+    CHT = soup.find('div', class_='exp-body').get_text()
+    data = [f'第{hit}籤\n',res, '\n',CHT]
+
+    return data,url

@@ -2,7 +2,9 @@ from layout.astro_bubble import create_astro_bubble
 from layout.ticket_bubble import create_ticket_bubble
 from layout.podcast_bubble import create_podcast_bubble
 from linebot.v3.messaging import FlexMessage, FlexContainer
-from services.gemini_reply import get_gemini_reply
+from services.features.gemini_reply import get_gemini_reply
+from layout.general_poem_bubble import create_general_poem_bubble
+from layout.help_bubble import create_help_bubble
 import re
 
 
@@ -179,7 +181,6 @@ def process_podcast_reply(data):
             for group in fortune_groups.keys():
                 if group in line:
                     current_group = group
-                    print(f"找到分類: {current_group}")
                     break
             continue
         
@@ -202,4 +203,39 @@ def process_podcast_reply(data):
         contents=FlexContainer.from_dict(bubble)
     )
 
-  
+def process_sixty_poem_reply(data, url, text):
+    # 處理標題
+    poem_name = "六十甲子籤"
+    title = data[0].strip()
+    poem = data[1].strip()
+    explain = data[3].strip()
+
+    result = get_gemini_reply("問題 "+text+" 籤詩結果 "+title+poem+explain)
+    web_url = url
+    img_url = None  # 或設置一個預設圖片
+    
+    return FlexMessage(
+        alt_text='六十甲子籤',
+        contents=FlexContainer.from_dict(
+            create_general_poem_bubble(
+                poem_name=poem_name,
+                title=title,
+                poem=poem,
+                explain=explain,
+                result=result,
+                img_url=img_url,  # 添加缺少的參數
+                web_url=web_url
+            )
+        )
+    )
+
+
+def process_help_reply(data):
+    bubble = create_help_bubble(data)
+    flex_message = FlexMessage(
+        alt_text="使用說明",
+        contents=FlexContainer.from_dict(bubble)
+    )
+    
+    return flex_message
+

@@ -3,3 +3,5 @@ uvicorn
 line-bot-sdk
 python-dotenv
 google-genai
+plurk_oauth==0.9.2
+beautifulsoup4
