@@ -8,6 +8,7 @@ from layout.help_bubble import create_help_bubble
 import re
 
 
+
 def process_astro_bubble_reply(data):
     
     # 檢查資料格式
@@ -238,4 +239,16 @@ def process_help_reply(data):
     )
     
     return flex_message
+
+async def process_text_message(event):
+    """處理文字訊息"""
+    user_id = event.source.user_id
+    message = event.message.text
+    
+    # 使用更新後的 get_gemini_reply
+    response = await get_gemini_reply(message, user_id)
+    
+    if response:
+        return response
+    return None
 

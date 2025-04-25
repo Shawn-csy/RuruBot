@@ -1,4 +1,3 @@
-
 import random
 import colorsys
 
@@ -70,10 +69,13 @@ def generate_muted_color_scheme():
 
 def create_fortune_box(title, star_count, content, icon, colors):
     """生成單個運勢區塊"""
+    # 判斷是否為高星級（4星以上）
+    is_highlighted = star_count >= 4
+    
     return {
         "type": "box",
         "layout": "vertical",
-        "backgroundColor": colors["secondary"],
+        "backgroundColor": "#FFE4E1" if is_highlighted else colors["secondary"],
         "cornerRadius": "md",
         "paddingAll": "sm",
         "borderWidth": "1px",
@@ -87,7 +89,7 @@ def create_fortune_box(title, star_count, content, icon, colors):
                         "type": "text",
                         "text": f"{icon} {title}",
                         "weight": "bold",
-                        "color": colors["text_dark"],
+                        "color": "#FF6B6B" if is_highlighted else colors["text_dark"],
                         "size": "sm",
                         "flex": 3
                     },
@@ -95,7 +97,7 @@ def create_fortune_box(title, star_count, content, icon, colors):
                         "type": "text",
                         "text": "★"*star_count + "☆"*(5-star_count),
                         "size": "xs",
-                        "color": colors["star"],
+                        "color": "#FF6B6B" if is_highlighted else colors["star"],
                         "flex": 2,
                         "align": "end"
                     }
@@ -107,115 +109,82 @@ def create_fortune_box(title, star_count, content, icon, colors):
                 "size": "xs",
                 "wrap": True,
                 "margin": "sm",
-                "color": colors["text_dark"]
+                "color": "#FF4500" if is_highlighted else colors["text_dark"]
             }
         ]
     }
 
-def create_astro_bubble(title, star_counts, reminder, starreminder=None):
-    """創建星座運勢 Bubble，使用隨機生成的低彩度顏色"""
+def create_astro_bubble(title, star_counts, reminder):
+    """創建星座運勢 Bubble"""
+    
     # 生成顏色方案
     colors = generate_muted_color_scheme()
     
-    fortune_icons = ["🎯", "💝", "💼", "💰"]
-    fortune_titles = ["整體運勢", "愛情運勢", "事業運勢", "財運運勢"]
-    
     # 創建運勢區塊
     fortune_boxes = []
-    for i, (star_count, content) in enumerate(star_counts):
-        if i < len(fortune_titles) and i < len(fortune_icons):
-            fortune_box = create_fortune_box(
-                fortune_titles[i], 
-                star_count, 
-                content, 
-                fortune_icons[i],
-                colors
-            )
-            fortune_boxes.append(fortune_box)
+    fortune_types = ["整體運勢", "愛情運勢", "事業運勢", "財運運勢"]
+    fortune_icons = ["🌟", "💝", "💼", "💰"]
     
-    # 創建頁腳內容
-    footer_contents = []
-    
-    # 如果有速配星座，添加速配星座區塊
-    if starreminder:
-        footer_contents.extend([
-            {
-                "type": "text",
-                "text": "💫 速配星座",
-                "weight": "bold",
-                "color": colors["text_light"],
-                "size": "xs",
-                "align": "center"
-            },
-            {
-                "type": "text",
-                "text": starreminder,
-                "color": colors["text_light"],
-                "size": "xs",
-                "wrap": True,
-                "align": "center",
-                "margin": "sm"
-            }
-        ])
+    for i, (stars, content) in enumerate(star_counts):
+        fortune_box = create_fortune_box(
+            title=fortune_types[i],
+            star_count=stars,
+            content=content,
+            icon=fortune_icons[i],
+            colors=colors
+        )
+        fortune_boxes.append(fortune_box)
 
-    # 添加提醒區塊
-    footer_contents.extend([
-        {
-            "type": "text",
-            "text": "💫 " + ("每週提醒" if starreminder else "今日小叮嚀"),
-            "weight": "bold",
-            "color": colors["text_light"],
-            "size": "xs",
-            "align": "center",
-            "margin": "md" if starreminder else None
-        },
-        {
-            "type": "text",
-            "text": reminder,
-            "color": colors["text_light"],
-            "size": "xs",
-            "wrap": True,
-            "align": "center",
-            "margin": "sm"
-        }
-    ])
-
-    # 創建 Bubble 容器
-    bubble = {
+    return {
         "type": "bubble",
-        "size": "kilo",
         "header": {
             "type": "box",
             "layout": "vertical",
-            "backgroundColor": colors["primary"],
-            "paddingAll": "md",
             "contents": [
                 {
                     "type": "text",
                     "text": title,
-                    "weight": "bold",
                     "size": "lg",
+                    "align": "center",
                     "color": colors["text_light"],
-                    "align": "center"
+                    "weight": "bold"
                 }
-            ]
+            ],
+            "backgroundColor": colors["primary"],
+            "paddingAll": "md"
         },
         "body": {
             "type": "box",
             "layout": "vertical",
-            "backgroundColor": colors["background"],
-            "paddingAll": "md",
+            "contents": fortune_boxes,
             "spacing": "sm",
-            "contents": fortune_boxes
+            "paddingAll": "md",
+            "backgroundColor": colors["background"]
         },
         "footer": {
             "type": "box",
             "layout": "vertical",
+            "contents": [
+                {
+                    "type": "text",
+                    "text": "💫 今日小叮嚀",
+                    "size": "xs",
+                    "align": "center",
+                    "color": colors["text_light"],
+                    "weight": "bold"
+                },
+                {
+                    "type": "text",
+                    "text": reminder,
+                    "size": "xs",
+                    "align": "center",
+                    "color": colors["text_light"],
+                    "wrap": True,
+                    "margin": "sm"
+                }
+            ],
             "backgroundColor": colors["primary"],
-            "paddingAll": "md",
-            "contents": footer_contents
+            "paddingAll": "md"
         }
     }
-    
-    return bubble
 

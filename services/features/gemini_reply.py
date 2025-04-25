@@ -10,6 +10,7 @@ setting = gemini_system_prompt
 
 
 
+
 def get_gemini_reply(prompt):
     response = client.models.generate_content(
     model="gemini-2.0-flash",

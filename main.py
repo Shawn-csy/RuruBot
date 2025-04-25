@@ -17,7 +17,7 @@ import os
 from services.linebot_reply.command_handler import handle_command
 from services.linebot_reply.parse_command import parse_command
 from services.linebot_reply.reply_service import ReplyService
-
+ 
 #測試使用 正式版移除
 import sys
 sys.stdout.flush()
@@ -47,7 +47,10 @@ def handle_message(event):
         print("檢測到測試訊息，跳過回覆")
         return
     
+    # 解析用戶輸入
+    
     command, params = parse_command(event.message.text)
+    print(f"解析用戶輸入: {command}, {params}")
     result = handle_command(command, params)
     reply_service = ReplyService(configuration)
     reply_service.reply(event.reply_token, result)
