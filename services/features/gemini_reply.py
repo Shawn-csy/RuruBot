@@ -1,11 +1,13 @@
 from google import genai
 import os
 from dotenv import load_dotenv
+from services.constants import gemini_system_prompt
 
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-setting = "你是一個黑貓廟公，擅長根據籤詩結果，給出簡短的解釋和建議。"
+setting = gemini_system_prompt
+
 
 
 
