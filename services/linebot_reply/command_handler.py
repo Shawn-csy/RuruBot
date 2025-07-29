@@ -3,12 +3,14 @@ import random
 import re
 from services.features.radar import radar
 from services.features.astro import get_astro_info
+from services.features.spotify_service import spotify_service
 from services.constants import astro as astro_dict
 from services.linebot_reply.process_reply_data import (
     process_astro_bubble_reply, 
     process_ticket_reply, 
     process_podcast_reply,
-    process_sixty_poem_reply
+    process_sixty_poem_reply,
+    process_music_reply
 )
 
 from services.features.get_tickets import locat_ticket, get_sixty_poem
@@ -71,6 +73,19 @@ def handle_command(command: str, params: Dict[str, Any]) -> Dict[str, Any]:
                 "data": reply
             }
             
+        elif command == "music":
+            music_info = spotify_service.get_random_recommendation()
+            if "error" in music_info:
+                return {
+                    "type": "text",
+                    "data": music_info["error"]
+                }
+            reply = process_music_reply(music_info)
+            return {
+                "type": "flex",
+                "data": reply
+            }
+            
         elif command == "sixty_poem":
             data, url = get_sixty_poem()
             if data and url:
@@ -95,7 +110,10 @@ def handle_command(command: str, params: Dict[str, Any]) -> Dict[str, Any]:
             }
         
     except Exception as e:
-        print(f"Error in handle_command: {str(e)}")
-        return None
+        print(f"處理命令時發生錯誤: {str(e)}")
+        return {
+            "type": "text",
+            "data": "處理命令時發生錯誤，請稍後再試"
+        }
     
     

@@ -116,8 +116,7 @@ def create_podcast_bubble(title, fortune_groups):
                         "color": "#555555",
                         "margin": "sm"
                     }
-                ],
-
+                ]
             })
         
         bubble["body"]["contents"].append(group_box)

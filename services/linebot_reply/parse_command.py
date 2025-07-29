@@ -1,5 +1,5 @@
 from services.features.command_ai import parse_command_with_ai
-from services.constants import astro as astro_dict
+from services.constants import astro as astro_dict, command_patterns
 from utils.tool import dice_pattern
 
 def parse_command(text):
@@ -43,6 +43,9 @@ def parse_command_traditional(text):
         return "podcast", {}
     elif "--help" in text:
         return "help", {}
+    #音樂推薦功能
+    elif "-m" in text:
+        return "music", {}
     #如果沒有匹配到任何命令，返回 None
     return None, {}
     
