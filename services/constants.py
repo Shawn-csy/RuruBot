@@ -30,6 +30,18 @@ astro_type = ['today', 'weekly', 'monthly']
 
 gemini_system_prompt = "你是一個黑貓仙人,名稱是露露，擅長根據籤詩結果，給出簡短的解釋和建議 通常不超過30字。"
 
+# 專用於對話的人設
+lulu_chat_system_prompt = """你是露露，一隻黑貓，
+
+個性特點：
+- 有一點賤賤的貓
+
+回覆風格：
+- 保持對話自然流暢
+- 回覆長度簡短，通常只回覆喵，不說話
+
+請用這個人設和用戶進行對話。"""
+
 # 添加指令映射
 command_patterns = {
     "radar": [
@@ -68,6 +80,9 @@ command_patterns = {
         "推薦音樂", "推薦歌曲", "有什麼好聽的", "想聽音樂",
         "推薦一首歌", "有什麼推薦的音樂", "想聽新歌",
         "音樂推薦", "歌曲推薦", "有什麼好歌"
+    ],
+    "lulu_chat": [
+        "露露"
     ]
 }
 
@@ -113,6 +128,11 @@ command_prompt = """
    - 關鍵字: 推薦音樂, 推薦歌曲, 有什麼好聽的, 想聽音樂, 推薦一首歌, 有什麼推薦的音樂, 想聽新歌, 音樂推薦, 歌曲推薦, 有什麼好歌
    - 參數: {}
 
+8. lulu_chat (露露對話):
+   - 關鍵字: 露露 (必須在開頭)
+   - 格式: "露露 內容"，提取「露露」後面的內容作為對話文本
+   - 必須包含參數: {"text": "用戶想對話的內容"}
+
 
 解析規則：
 1. 必須返回完整的 JSON 格式
@@ -120,6 +140,7 @@ command_prompt = """
 3. 如果找不到明確的時間類型，astro 命令預設使用 "daily"
 4. 抽籤類命令必須提取用戶問題作為參數
 5. 當用戶詢問使用方式時（包含"怎麼用"、"使用說明"等關鍵字），一律返回 help 指令
+6. IMPORTANT: 如果用戶輸入不包含任何上述指令的關鍵字，或無法明確匹配到任何指令，請返回: {"command": null, "params": {}}
 
 輸出格式必須是以下其中一種：
 {"command": "astro", "params": {"astro_name": "雙子座", "type": "daily"}}
@@ -129,6 +150,7 @@ command_prompt = """
 {"command": "sixty_poem", "params": {"text": "感情運"}}
 {"command": "help", "params": {}}
 {"command": "music", "params": {}}
+{"command": "lulu_chat", "params": {"text": "用戶對話內容"}}
 
 範例：
 輸入："怎麼用"
@@ -138,3 +160,13 @@ command_prompt = """
 輸出：{"command": "help", "params": {}}
 
 用戶輸入: """
+
+
+playlist=[]
+
+# Spotify 用戶映射表，用於 --ping 指令和隨機選擇用戶的公開歌單
+playlist_provider = {
+    "鼠藥": "https://open.spotify.com/user/nightshu?si=afef7ca34d8048da",
+    "兔子": "https://open.spotify.com/user/suminxin?si=f76719fcd25a4160",
+    "ㄉㄉ": "https://open.spotify.com/user/31nawtug7zzoostbgkvvtbufeplm?si=c142cf13057940f8"
+}

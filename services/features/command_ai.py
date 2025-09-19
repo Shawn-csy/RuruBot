@@ -64,9 +64,13 @@ def _validate_and_clean_response(result: dict, original_text: str) -> tuple:
         
     command = result["command"]
     params = result["params"]
-    
+
+    # 如果 AI 回傳 null，表示無法識別指令
+    if command is None:
+        return None, {}
+
     # 檢查 command 是否為有效值
-    valid_commands = {"radar", "astro", "ticket", "sixty_poem", "podcast", "help"}
+    valid_commands = {"radar", "astro", "ticket", "sixty_poem", "podcast", "help", "music", "lulu_chat"}
     if command not in valid_commands:
         return None, {}
         
@@ -82,11 +86,15 @@ def _validate_and_clean_response(result: dict, original_text: str) -> tuple:
     elif command == "sixty_poem":
         if not _validate_sixty_poem_command(params, original_text):
             return None, {}
-            
+
+    elif command == "lulu_chat":
+        if not _validate_lulu_chat_command(params, original_text):
+            return None, {}
+
     # 驗證命令關鍵字是否真的出現在原文中
     if not _validate_command_keywords(command, original_text):
         return None, {}
-        
+
     return command, params
 
 def _validate_astro_command(params: dict, text: str) -> bool:
@@ -144,11 +152,30 @@ def _validate_sixty_poem_command(params: dict, text: str) -> bool:
     keywords = command_patterns["sixty_poem"]
     return any(keyword in text for keyword in keywords)
 
+def _validate_lulu_chat_command(params: dict, text: str) -> bool:
+    """驗證露露對話命令的參數"""
+    if "text" not in params:
+        return False
+
+    # 確保原文中確實以「露露」開頭
+    if not text.startswith("露露"):
+        return False
+
+    # 確保有對話內容（不只是「露露」）
+    content = text[2:].strip()
+    if not content:
+        return False
+
+    return True
+
 def _validate_command_keywords(command: str, text: str) -> bool:
     """驗證命令關鍵字是否出現在原文中"""
     if command not in command_patterns:
+        # 對於 lulu_chat 特殊處理
+        if command == "lulu_chat":
+            return text.startswith("露露")
         return False
-        
+
     patterns = command_patterns[command]
     if isinstance(patterns, list):
         return any(keyword in text for keyword in patterns)
@@ -161,4 +188,4 @@ def _validate_command_keywords(command: str, text: str) -> bool:
             return (any(keyword in text for keyword in basic_patterns) or
                    any(keyword in text for keyword in weekly_patterns) or
                    any(sign in text for sign in signs))
-    return False 
+    return False

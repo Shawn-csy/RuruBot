@@ -33,6 +33,11 @@ RuruBot 是一個基於 LINE Messaging API 開發的 LineBot，使用 cursor 開
 - 分類整理（讚的、穩的、累的）
 - 完整星座分析
 
+### 5. 歌曲推薦 📻
+
+- 使用指定的人歌單隨機推薦曲子
+- 可以自行增加
+
 ## 技術特點
 
 - 使用 FastAPI 建構 Web 服務
