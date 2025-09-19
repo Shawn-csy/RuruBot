@@ -1,42 +1,35 @@
 # RuruBot - LINE 智能助手
 
-RuruBot 是一個基於 LINE Messaging API 開發的 LineBot，使用 cursor 開發 。
+[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+RuruBot 是一個基於 LINE Messaging API 開發的 LineBot，使用 FastAPI 進行開發。
 
 ## 功能特點
 
-### 1. 氣象雷達 🌧
+1.  **氣象雷達** 🌧️
+    - 即時查看氣象雷達圖。
+2.  **星座運勢** ⭐
+    - 查詢 12 星座的日運、週運，並提供完整的運勢分析。
+3.  **淺草寺抽籤** 🎋
+    - 提供電子淺草寺觀音籤，並附有 AI 解籤服務。
+4.  **六十甲子籤** 🎯
+    - 提供傳統六十甲子籤詩，並附有 AI 智能解籤。
+5.  **國師運勢** 📻
+    - 提供每週星座運勢速報，由 AI 分類整理。
+6.  **歌曲推薦** 🎶
+    - 從指定的 Spotify 播放清單中隨機推薦歌曲。
 
-- 即時查看氣象雷達圖
-- 支援關鍵字：雷達、radar、天氣雷達等
+## 如何使用
 
-### 2. 星座運勢 ⭐
+大部分功能支援透過關鍵字觸發：
 
-- 支援 12 星座日運、週運查詢
-- 完整的運勢分析（整體運、愛情運、事業運、財運）
-- 智能分析和建議
-
-### 3. 淺草寺抽籤 🎋
-
-- 電子淺草寺觀音籤
-- AI 解籤服務
-- 客製化問題分析
-
-### 4. 六十甲子籤 🎯
-
-- 傳統六十甲子籤詩
-- AI 智能解籤
-- 詳細解析和建議
-
-### 5. 國師運勢 📻
-
-- 每週星座運勢速報
-- 分類整理（讚的、穩的、累的）
-- 完整星座分析
-
-### 5. 歌曲推薦 📻
-
-- 使用指定的人歌單隨機推薦曲子
-- 可以自行增加
+- **天氣**：`雷達`、`radar`
+- **星座**：`星座`、`牡羊座`、`週運天秤`
+- **抽籤**：`抽籤`、`淺草`
+- **解夢**：`解夢` + 你的夢境
+- **音樂**：`-m`
+- **幫助**：`help`、`說明`
 
 ## 技術特點
 
@@ -48,34 +41,41 @@ RuruBot 是一個基於 LINE Messaging API 開發的 LineBot，使用 cursor 開
 
 ## 開發環境設置
 
-1. 安裝依賴：
+1.  安裝依賴：
 
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-2. 設置環境變數：
-
-```bash
-# .env 檔案
-LINE_CHANNEL_ACCESS_TOKEN=your_access_token
-LINE_CHANNEL_SECRET=your_channel_secret
-GEMINI_API_KEY=your_gemini_api_key
-```
+2.  設置環境變數 (建立一個 `.env` 檔案):
+    ```bash
+    # .env 檔案
+    LINE_CHANNEL_ACCESS_TOKEN=your_access_token
+    LINE_CHANNEL_SECRET=your_channel_secret
+    GEMINI_API_KEY=your_gemini_api_key
+    ```
 
 ## 專案結構
 
+```
 RuruBot/
+├── Dockerfile
+├── main.py
+├── requirements.txt
+├── Readme.md
+├── .env # 環境變數
+├── docs/
+│   └── changelog.md
+├── layout/
+│   └── ... # Flex Message 版面配置
 ├── services/
-│ ├── features/ # 功能模組
-│ ├── linebot_reply/ # LINE Bot 回覆處理
-│ └── constants.py # 常數定義
-├── layout/ # Flex Message 版面配置
-├── tests/ # 測試目錄
-│ ├── features/ # 功能測試
-│ └── commands/ # 指令測試
-├── main.py # 主程式
-└── requirements.txt # 依賴套件
+│   ├── features/       # 主要功能模組
+│   └── linebot_reply/  # LINE Bot 回覆處理
+├── statics/
+│   └── ... # 靜態資源
+└── tests/
+    └── ... # 測試
+```
 
 ## 測試
 
@@ -101,8 +101,12 @@ pytest tests/commands/
 
 ```bash
 docker build -t ruru-bot .
-docker run -d -p 8000:8000 ruru-bot
+docker run -d -p 8000:8000 --env-file .env ruru-bot
 ```
+
+## 更新日誌
+
+詳細的更新歷史請參考 [changelog.md](./docs/changelog.md)。
 
 ## 授權
 
@@ -111,63 +115,3 @@ MIT License
 ## 作者
 
 Shawn Chang
-
-## 更新日誌
-
-## [0.1.2c] - 2025-07-29 修復 apple podcast 格式更改問題
-
-### 更新
-
-- 放棄 apple podcast , 國師資訊改為使用 spotify api
-- 移除爬蟲解析 , 直接獲取 api 資訊
-- 增加-m 功能獲得推薦音樂
-
-## [0.1.2b] - 2025-04-25
-
-### 更新
-
-- 新增嚴格語意解析器
-
-### 修正
-
-- 星座指令過於敏感
-
-### 更新
-
-- 新增星座運勢強調色(4 星以上)
-
-### 修正
-
-## [0.1.2] - 2025-03-19
-
-### 更新
-
-- 新增使用說明功能
-- 新增 Dockerfile
-
-### 修正
-
-- Gemini Reply 修正
-
-## [0.1.1] - 2025-03-19
-
-### 更新
-
-- 新增骰子功能
-- 新增 Gemini Reply
-- 新增國師開示功能
-
-### 修正
-
-- 統一 Flex Message 格式
-
-## [0.1.0] - 2025-03-18
-
-### 開發
-
-- 新增籤詩功能,增加 layout
-- 新增星座功能
-- 新增雷達功能
-- 新增露露開示功能
-- 重構整體套件格式
-- 新增版控
