@@ -4,7 +4,7 @@ from layout.help_bubble import create_help_bubble
 def get_help_message():
     """取得幫助訊息"""
     help_content = {
-        "title": "露露使用說明 🐱",
+        "title": "機器露露使用說明",
         "sections": [
             {
                 "title": "🌧 天氣查詢",
@@ -50,7 +50,18 @@ def get_help_message():
                     "唐綺陽"
                 ],
                 "description": "查看本週星座運勢分析"
-            }
+            },
+            {
+                "title": "📻 音樂推薦",
+                "commands": [
+                    "--m ",
+                    "--ping ",
+                    "--ping 人名"
+                    
+                ],
+                "description": "隨便推你一首歌"
+            },
+
         ],
         "footer": {
             "text": "💡 小提示：你可以用自然語言跟我對話，我會理解你的意思！",

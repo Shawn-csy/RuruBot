@@ -44,8 +44,21 @@ def parse_command_traditional(text):
     elif "--help" in text:
         return "help", {}
     #音樂推薦功能
-    elif "-m" in text:
+    elif "--m"  in text:
         return "music", {}
+    #指定用戶音樂推薦功能
+    elif "--ping" in text:
+        user_name = text.replace("--ping", "").strip()
+        if user_name:
+            return "music", {"user_name": user_name}
+        else:
+            return "music", {}
+    #露露 AI 對話功能
+    elif text.startswith("露露"):
+        content = text[2:].strip()  # 移除「露露」並去除空白
+        if content:  # 確保有內容
+            return "lulu_chat", {"text": content}
+
     #如果沒有匹配到任何命令，返回 None
     return None, {}
     
