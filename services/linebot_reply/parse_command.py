@@ -62,7 +62,7 @@ def parse_command_traditional(text):
     # ==================== 塔羅牌占卜功能（新版 API） ====================
 
     # 每日塔羅
-    elif text == "每日塔羅" or "本日塔羅":
+    elif text == "每日塔羅" or text == "本日塔羅":
         return "tarot", {"method": "daily", "question": None}
 
     # 問題塔羅：-塔羅 [問題]
