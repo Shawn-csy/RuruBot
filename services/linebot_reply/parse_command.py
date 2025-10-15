@@ -59,6 +59,62 @@ def parse_command_traditional(text):
         if content:  # 確保有內容
             return "lulu_chat", {"text": content}
 
+    # ==================== 塔羅牌占卜功能（新版 API） ====================
+
+    # 每日塔羅
+    elif text == "每日塔羅" or "本日塔羅":
+        return "tarot", {"method": "daily", "question": None}
+
+    # 問題塔羅：-塔羅 [問題]
+    elif text.startswith("-塔羅"):
+        question = text[3:].strip()  # 移除 "-塔羅" 並取得問題
+        if question:  # 確保有問題內容
+            return "tarot", {"method": "question", "question": question}
+        else:
+            # 如果只輸入 "-塔羅" 沒有問題，則視為每日塔羅
+            return "tarot", {"method": "daily", "question": None}
+
+    # ==================== 舊版塔羅功能（已註解） ====================
+    # # 塔羅牌占卜說明（必須在塔羅占卜之前檢查，避免衝突）
+    # elif text in ["-塔羅說明", "--tarot-help", "-塔羅幫助", "--tarot help"]:
+    #     return "tarot_help", {}
+
+    # # 塔羅牌占卜功能（需要明確指令）
+    # elif (text.startswith("-塔羅") or text.startswith("--tarot")) and text not in ["-塔羅說明", "-塔羅幫助"]:
+    #     # 解析問題和牌陣
+    #     question = None
+    #     spread_name = "時間之流占卜法"  # 預設牌陣
+
+    #     # 移除關鍵字，提取問題
+    #     if text.startswith("-塔羅"):
+    #         cleaned_text = text[3:].strip()  # 移除 "-塔羅"
+    #     else:
+    #         cleaned_text = text[7:].strip()  # 移除 "--tarot"
+
+    #     # 檢查是否指定牌陣
+    #     spread_keywords = {
+    #         "時間之流": "時間之流占卜法",
+    #         "問題解決": "問題解決占卜法 / 問題解決牌陣",
+    #         "四要素": "要素展開法 / 四要素展開法",
+    #         "塞爾特": "塞爾特十字占卜法（塞爾特十字牌陣）",
+    #         "馬蹄鐵": "Ｖ字形馬蹄鐵占卜法",
+    #         "靈感對應": "靈感對應牌陣 / 靈感對應占卜法",
+    #         "二擇一": "二擇一占卜法",
+    #         "三擇一": "三擇一牌陣 / 三擇一占卜法"
+    #     }
+
+    #     for keyword, spread in spread_keywords.items():
+    #         if keyword in cleaned_text:
+    #             spread_name = spread
+    #             cleaned_text = cleaned_text.replace(keyword, "").strip()
+    #             break
+
+    #     # 剩餘的文字作為問題
+    #     if cleaned_text:
+    #         question = cleaned_text
+
+    #     return "tarot", {"question": question, "spread_name": spread_name}
+
     #如果沒有匹配到任何命令，返回 None
     return None, {}
     

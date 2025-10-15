@@ -1,4 +1,4 @@
-# RuruBot - LINE 智能助手
+# RuruBot - LINEBOT
 
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -19,17 +19,19 @@ RuruBot 是一個基於 LINE Messaging API 開發的 LineBot，使用 FastAPI �
     - 提供每週星座運勢速報，由 AI 分類整理。
 6.  **歌曲推薦** 🎶
     - 從指定的 Spotify 播放清單中隨機推薦歌曲。
+7.  **塔羅牌** 🎶
+    - 從可以使用塔羅牌占卜。
 
 ## 如何使用
 
 大部分功能支援透過關鍵字觸發：
 
-- **天氣**：`雷達`、`radar`
+- **天氣**：`雷達`、`radar` //維修中
 - **星座**：`星座`、`牡羊座`、`週運天秤`
 - **抽籤**：`抽籤`、`淺草`
-- **解夢**：`解夢` + 你的夢境
-- **音樂**：`-m`
-- **幫助**：`help`、`說明`
+- **音樂**：`--ping`
+- **塔羅**：`--塔羅`、`--tarot`
+- **幫助**：`--help`、`--說明`
 
 ## 技術特點
 

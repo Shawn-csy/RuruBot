@@ -1,0 +1,435 @@
+{
+  "spreads": [
+    {
+      "spread_name": "時間之流占卜法",
+      "required_cards": 3,
+      "spread_purpose": "以三張牌閱讀過去→現在→未來的時間線。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "過去的情況與狀況"
+        },
+        {
+          "position": 2,
+          "meaning": "現在的狀態與處境"
+        },
+        {
+          "position": 3,
+          "meaning": "未來的走向與趨勢"
+        }
+      ],
+      "sources": [
+        "https://www.tarnote.com/blog/%E5%A1%94%E7%BE%85%E5%88%9D%E5%AD%B8%E8%80%85%E5%BF%85%E5%AD%B8%E7%AC%AC%E4%B8%80%E6%8B%9B%E7%B6%93%E5%85%B8%E4%B8%8D%E6%95%97%E7%9A%84%E6%99%82%E9%96%93%E4%B9%8B%E6%B5%81%E5%8D%A0%E5%8D%9C%E6%B3%95"
+      ]
+    },
+    {
+      "spread_name": "問題解決占卜法 / 問題解決牌陣",
+      "required_cards": 3,
+      "spread_purpose": "針對具體問題：找原因、看現況、定對策。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "原因：問題產生的根源"
+        },
+        {
+          "position": 2,
+          "meaning": "情形：目前問題顯現的狀況"
+        },
+        {
+          "position": 3,
+          "meaning": "對策：可採取的解決方式"
+        }
+      ],
+      "sources": [
+        "https://www.tarnote.com/blog/%E5%95%8F%E9%A1%8C%E8%A7%A3%E6%B1%BA%E5%8D%A0%E5%8D%9C%E6%B3%95%E5%95%8F%E9%A1%8C%E8%A7%A3%E6%B1%BA%E7%89%8C%E9%99%A3%E8%A1%9D%E7%A0%B4%E9%98%BB%E7%A4%99%E8%AE%93%E5%9B%B0%E6%93%BE%E4%B8%8D%E5%86%8D%E6%98%AF%E9%BA%BB%E7%85%AE%E5%95%8F%E9%A1%8C"
+      ]
+    },
+    {
+      "spread_name": "要素展開法 / 四要素展開法",
+      "required_cards": 4,
+      "spread_purpose": "用火、風、水、土四要素，從行動、溝通、情緒、物質四面向提出建議。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "火（行動）：行動方向與動力"
+        },
+        {
+          "position": 2,
+          "meaning": "風（溝通）：表達與思考的策略"
+        },
+        {
+          "position": 3,
+          "meaning": "水（情緒）：情感與態度的建議"
+        },
+        {
+          "position": 4,
+          "meaning": "土（物質）：資源、金錢或實務做法"
+        }
+      ],
+      "sources": [
+        "https://www.tarnote.com/blog/%E5%9B%9B%E5%A4%A7%E5%85%83%E7%B4%A0%E4%BE%86%E5%8A%A9%E6%94%BB%E8%A6%81%E7%B4%A0%E5%B1%95%E9%96%8B%E6%B3%95%E5%9B%9B%E8%A6%81%E7%B4%A0%E5%B1%95%E9%96%8B%E6%B3%95"
+      ]
+    },
+    {
+      "spread_name": "塞爾特十字占卜法（塞爾特十字牌陣）",
+      "required_cards": 10,
+      "spread_purpose": "經典萬用大型牌陣，全面審視現況、影響、內外在與結果。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "現況：問題的現狀"
+        },
+        {
+          "position": 2,
+          "meaning": "影響因素：加在現況上的阻力或助力"
+        },
+        {
+          "position": 3,
+          "meaning": "理想／目標：理想狀況或對事情的想法"
+        },
+        {
+          "position": 4,
+          "meaning": "基礎：已累積的成果／可用資源／成因"
+        },
+        {
+          "position": 5,
+          "meaning": "過去：問題的過往狀況"
+        },
+        {
+          "position": 6,
+          "meaning": "未來：將要發生的事情"
+        },
+        {
+          "position": 7,
+          "meaning": "自我：問卜者本身的狀況"
+        },
+        {
+          "position": 8,
+          "meaning": "環境：外在環境因素或他人的觀點"
+        },
+        {
+          "position": 9,
+          "meaning": "希望或恐懼：想發生或害怕發生之事"
+        },
+        {
+          "position": 10,
+          "meaning": "結局：事情最終的結果"
+        }
+      ],
+      "sources": [
+        "https://www.tarnote.com/blog/%E5%A1%9E%E7%88%BE%E7%89%B9%E5%8D%81%E5%AD%97%E5%8D%A0%E5%8D%9C%E6%B3%95%E5%B0%88%E5%AE%B6%E7%B4%9A%E7%9A%84%E5%A1%94%E7%BE%85%E7%B6%93%E5%85%B8%E7%89%8C%E9%99%A3"
+      ]
+    },
+    {
+      "spread_name": "Ｖ字形馬蹄鐵占卜法",
+      "required_cards": 7,
+      "spread_purpose": "七張牌橫跨過去—現在—未來與環境、態度等層面，中階萬用牌陣。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "過去狀況（可最遠至 18 個月前）"
+        },
+        {
+          "position": 2,
+          "meaning": "現在狀況（占卜前後約四週）"
+        },
+        {
+          "position": 3,
+          "meaning": "未來狀況（近未來，約三個月內可能性）"
+        },
+        {
+          "position": 4,
+          "meaning": "針對人：對方狀態；針對事：問題答案"
+        },
+        {
+          "position": 5,
+          "meaning": "周遭狀況：外界影響"
+        },
+        {
+          "position": 6,
+          "meaning": "本人態度（希望或恐懼）"
+        },
+        {
+          "position": 7,
+          "meaning": "最後結果"
+        }
+      ],
+      "sources": [
+        "https://www.tarnote.com/blog/%EF%BC%B6%E5%AD%97%E5%BD%A2%E9%A6%AC%E8%B9%84%E9%90%B5%E5%8D%A0%E5%8D%9C%E6%B3%95-%EF%BC%B6%E5%AD%97%E5%BD%A2%E9%A6%AC%E8%B9%84%E9%90%B5%E7%89%8C%E9%99%A3%E5%A1%94%E7%BE%85%E5%B8%AB%E9%83%BD%E5%B9%BE%E4%B9%8E%E5%BF%85%E5%AD%B8%E7%9A%84%E4%B8%AD%E7%B4%9A%E7%89%8C%E9%99%A3"
+      ]
+    },
+    {
+      "spread_name": "靈感對應牌陣 / 靈感對應占卜法",
+      "required_cards": 6,
+      "spread_purpose": "解析雙方（或雙邊）的主觀想法與認知，觀察現況與未來發展。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "自己的心態：自己對他的看法"
+        },
+        {
+          "position": 2,
+          "meaning": "對方的心態：他對自己的看法"
+        },
+        {
+          "position": 3,
+          "meaning": "自己的認為：自己認為目前雙方的關係"
+        },
+        {
+          "position": 4,
+          "meaning": "對方的認為：對方認為目前雙方的關係"
+        },
+        {
+          "position": 5,
+          "meaning": "自己的想像：自己認為雙方未來發展"
+        },
+        {
+          "position": 6,
+          "meaning": "對方的想像：對方認為雙方未來發展"
+        }
+      ],
+      "sources": [
+        "https://www.tarnote.com/blog/%E9%9D%88%E6%84%9F%E5%B0%8D%E6%87%89%E7%89%8C%E9%99%A3%E4%BD%BF%E4%BD%A0%E5%9C%A8%E6%83%85%E5%A0%B4%E8%88%87%E8%81%B7%E5%A0%B4%E9%83%BD%E8%83%BD%E5%A6%82%E9%AD%9A%E5%BE%97%E6%B0%B4"
+      ]
+    },
+    {
+      "spread_name": "二擇一占卜法",
+      "required_cards": 5,
+      "spread_purpose": "比較 A/B 兩個互斥選項的決策牌陣。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "當事人本身（現況／問題）"
+        },
+        {
+          "position": 2,
+          "meaning": "選擇 A 的現況或近未來"
+        },
+        {
+          "position": 3,
+          "meaning": "選擇 B 的現況或近未來"
+        },
+        {
+          "position": 4,
+          "meaning": "選擇 A 之後的未來發展"
+        },
+        {
+          "position": 5,
+          "meaning": "選擇 B 之後的未來發展"
+        }
+      ],
+      "sources": [
+        "https://www.tarnote.com/blog/to-be-or-not-to-be%E4%BA%8C%E6%93%87%E4%B8%80%E5%8D%A0%E5%8D%9C%E6%B3%95%E8%AE%93%E4%BD%A0%E5%AD%B8%E6%9C%83%E7%95%B6%E6%A9%9F%E7%AB%8B%E6%96%B7%E7%9A%84%E6%9C%AC%E4%BA%8B"
+      ]
+    },
+    {
+      "spread_name": "精神狀態占卜法 / 精神狀態牌陣",
+      "required_cards": 10,
+      "spread_purpose": "探究個人的心理與精神狀態在不同時空裡的變化與影響。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "現在的自我狀態"
+        },
+        {
+          "position": 2,
+          "meaning": "遙遠過去的心理狀態"
+        },
+        {
+          "position": 3,
+          "meaning": "最近的過去的精神狀況"
+        },
+        {
+          "position": 4,
+          "meaning": "左半腦：思考／內在邏輯"
+        },
+        {
+          "position": 5,
+          "meaning": "右半腦：直覺與創意"
+        },
+        {
+          "position": 6,
+          "meaning": "潛意識的影響因素"
+        },
+        {
+          "position": 7,
+          "meaning": "目前的社會人際環境"
+        },
+        {
+          "position": 8,
+          "meaning": "當下影響心理的因素"
+        },
+        {
+          "position": 9,
+          "meaning": "不久的未來心理變化"
+        },
+        {
+          "position": 10,
+          "meaning": "遙遠未來的精神趨勢"
+        }
+      ],
+      "sources": [
+        "https://www.tarnote.com/blog/%E7%B2%BE%E7%A5%9E%E7%8B%80%E6%85%8B%E5%8D%A0%E5%8D%9C%E6%B3%95-%E7%B2%BE%E7%A5%9E%E7%8B%80%E6%85%8B%E7%89%8C%E9%99%A3%E5%BF%83%E6%99%BA%E9%A0%AD%E8%85%A6%E7%9A%84%E7%8B%80%E6%B3%81"
+      ]
+    },
+    {
+      "spread_name": "三擇一牌陣 / 三擇一占卜法",
+      "required_cards": 9,
+      "spread_purpose": "在三個選項（A/B/C）中做出抉擇與預見發展。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "現況：目前的狀況"
+        },
+        {
+          "position": 2,
+          "meaning": "阻礙：目前的阻力或障礙"
+        },
+        {
+          "position": 3,
+          "meaning": "環境：外在影響因素"
+        },
+        {
+          "position": 4,
+          "meaning": "A 路線：選 A 的結果方向"
+        },
+        {
+          "position": 5,
+          "meaning": "A 發展：選 A 後續趨勢"
+        },
+        {
+          "position": 6,
+          "meaning": "B 路線：選 B 的結果方向"
+        },
+        {
+          "position": 7,
+          "meaning": "B 發展：選 B 後續趨勢"
+        },
+        {
+          "position": 8,
+          "meaning": "C 路線：選 C 的結果方向"
+        },
+        {
+          "position": 9,
+          "meaning": "C 發展：選 C 後續趨勢"
+        }
+      ],
+      "sources": [
+        "https://www.tarnote.com/blog/%E4%B8%89%E6%93%87%E4%B8%80%E7%89%8C%E9%99%A3%E4%B8%89%E6%93%87%E4%B8%80%E5%8D%A0%E5%8D%9C%E6%B3%95"
+      ]
+    },
+    {
+      "spread_name": "馬蹄鐵牌陣（通用 7 張版）",
+      "required_cards": 7,
+      "spread_purpose": "廣泛使用的七張牌馬蹄鐵，適合決策與全局盤點。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "過去"
+        },
+        {
+          "position": 2,
+          "meaning": "現在"
+        },
+        {
+          "position": 3,
+          "meaning": "隱藏的影響"
+        },
+        {
+          "position": 4,
+          "meaning": "當事人本身"
+        },
+        {
+          "position": 5,
+          "meaning": "環境／外界因素"
+        },
+        {
+          "position": 6,
+          "meaning": "建議／行動方向"
+        },
+        {
+          "position": 7,
+          "meaning": "結果（傾向，不是定論）"
+        }
+      ],
+      "sources": [
+        "https://www.learnreligions.com/seven-card-horseshoe-tarot-spread-2562801",
+        "https://teachmetarot.com/practice-readings/the-horse-shoe-spread-practice-reading/"
+      ]
+    },
+    {
+      "spread_name": "鑽石占卜法（通用 4 張版）",
+      "required_cards": 4,
+      "spread_purpose": "以菱形四點掌握挑戰、優勢、弱點與建議（或未來）。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "挑戰／眼前議題"
+        },
+        {
+          "position": 2,
+          "meaning": "你的優勢"
+        },
+        {
+          "position": 3,
+          "meaning": "你的弱點／盲點"
+        },
+        {
+          "position": 4,
+          "meaning": "建議／下一步（或未來）"
+        }
+      ],
+      "sources": [
+        "https://www.thetarotlady.com/tarot-spread-test-drive-barbara-moore-facing-challenge-spread/",
+        "https://tarotqa.com/spreads/diamond"
+      ]
+    },
+    {
+      "spread_name": "九宮格 / 3x3 展開（通用）",
+      "required_cards": 9,
+      "spread_purpose": "九張牌的方陣：可從列、行與對角線解讀，適合日常總覽與短期預測。",
+      "positions": [
+        {
+          "position": 1,
+          "meaning": "左上／過去（1-4-7 為過去）"
+        },
+        {
+          "position": 2,
+          "meaning": "上中／現在（2-5-8 為現在）"
+        },
+        {
+          "position": 3,
+          "meaning": "右上／近未來（3-6-9 為近未來）"
+        },
+        {
+          "position": 4,
+          "meaning": "左中（與 1、7 成列）"
+        },
+        {
+          "position": 5,
+          "meaning": "中央（樞紐）"
+        },
+        {
+          "position": 6,
+          "meaning": "右中（與 3、9 成列）"
+        },
+        {
+          "position": 7,
+          "meaning": "左下（與 1、4 成列）"
+        },
+        {
+          "position": 8,
+          "meaning": "下中（與 2、5 成列）"
+        },
+        {
+          "position": 9,
+          "meaning": "右下（與 3、6 成列）"
+        }
+      ],
+      "sources": [
+        "https://labyrinthos.co/blogs/learn-tarot-with-labyrinthos-academy/how-to-read-nine-card-portrait-box-or-3x3-lenormand-spreads",
+        "https://spells8.com/nine-card-tarot-spread/"
+      ]
+    }
+  ]
+}
