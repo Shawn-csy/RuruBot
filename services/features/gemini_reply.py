@@ -19,7 +19,7 @@ def get_gemini_reply(prompt, system_prompt=None):
         system_prompt = gemini_system_prompt
 
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         contents=system_prompt + prompt,
     )
     return response.text

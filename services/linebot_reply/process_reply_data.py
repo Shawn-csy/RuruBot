@@ -5,6 +5,8 @@ from linebot.v3.messaging import FlexMessage, FlexContainer
 from services.features.gemini_reply import get_gemini_reply
 from layout.general_poem_bubble import create_general_poem_bubble
 from layout.help_bubble import create_help_bubble
+from layout.tarot_help_bubble import create_tarot_help_bubble
+from layout.tarot_daily_bubble import create_tarot_daily_bubble
 import re
 from typing import Dict, Any
 
@@ -282,8 +284,84 @@ def process_help_reply(data):
         alt_text="使用說明",
         contents=FlexContainer.from_dict(bubble)
     )
-    
+
     return flex_message
+
+
+def process_tarot_reply(tarot_result: str) -> str:
+    """
+    處理塔羅牌占卜結果
+
+    Args:
+        tarot_result: tarot_function 返回的完整占卜結果字串
+
+    Returns:
+        str: 格式化後的文字回覆
+    """
+    # 塔羅牌結果已經在 tarot.py 中格式化好了，直接返回即可
+    return tarot_result
+
+
+def process_tarot_help_reply() -> FlexMessage:
+    """
+    處理塔羅占卜說明的回覆
+
+    Returns:
+        FlexMessage: 塔羅占卜詳細說明的 Flex Message
+    """
+    bubble = create_tarot_help_bubble()
+    flex_message = FlexMessage(
+        alt_text="塔羅占卜使用說明",
+        contents=FlexContainer.from_dict(bubble)
+    )
+    return flex_message
+
+
+def process_tarot_daily_reply(tarot_data: str) -> FlexMessage:
+    """
+    處理每日塔羅的回覆,使用 Flex Message 格式化
+
+    Args:
+        tarot_data: API 返回的每日塔羅文字內容
+
+    Returns:
+        FlexMessage: 格式化的每日塔羅 Flex Message
+    """
+    try:
+        bubble = create_tarot_daily_bubble(tarot_data)
+        flex_message = FlexMessage(
+            alt_text="今日塔羅運勢解析",
+            contents=FlexContainer.from_dict(bubble)
+        )
+        return flex_message
+    except Exception as e:
+        print(f"處理塔羅回覆時發生錯誤: {str(e)}")
+        # 如果格式化失敗,回傳簡單的文字訊息
+        return FlexMessage(
+            alt_text="今日塔羅運勢",
+            contents=FlexContainer.from_dict({
+                "type": "bubble",
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "🔮 今日塔羅運勢",
+                            "weight": "bold",
+                            "size": "lg"
+                        },
+                        {
+                            "type": "text",
+                            "text": tarot_data,
+                            "wrap": True,
+                            "size": "sm",
+                            "margin": "md"
+                        }
+                    ]
+                }
+            })
+        )
 
 async def process_text_message(event):
     """處理文字訊息"""

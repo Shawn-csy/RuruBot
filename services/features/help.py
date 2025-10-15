@@ -1,6 +1,3 @@
-from linebot.v3.messaging import FlexMessage, FlexContainer
-from layout.help_bubble import create_help_bubble
-
 def get_help_message():
     """取得幫助訊息"""
     help_content = {
@@ -52,14 +49,21 @@ def get_help_message():
                 "description": "查看本週星座運勢分析"
             },
             {
-                "title": "📻 音樂推薦",
+                "title": "🎵 音樂推薦",
                 "commands": [
                     "--m ",
                     "--ping ",
                     "--ping 人名"
-                    
+
                 ],
                 "description": "隨便推你一首歌"
+            },
+            {
+                "title": "🔮 塔羅占卜",
+                "commands": [
+                    "每日塔羅：限時開放，協助測算每日運勢"
+                ],
+                "description": "此指令為限時開放，用完就沒惹\n"
             },
 
         ],

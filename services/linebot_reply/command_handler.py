@@ -16,8 +16,14 @@ from services.linebot_reply.process_reply_data import (
 from services.features.get_tickets import locat_ticket, get_sixty_poem
 from services.features.get_podcast import get_podcast
 from services.features.help import get_help_message
-from services.linebot_reply.process_reply_data import process_help_reply
+from services.linebot_reply.process_reply_data import (
+    process_help_reply,
+    process_tarot_reply,
+    process_tarot_help_reply,
+    process_tarot_daily_reply  # 新增每日塔羅處理
+)
 from services.features.gemini_reply import get_gemini_reply
+from services.features.tarot import tarot_with_fallback  # 智能 API (含 fallback)
 
 dice_pattern = re.compile(r'^(\d+)d(\d+)$', re.IGNORECASE)
 
@@ -140,6 +146,64 @@ def handle_command(command: str, params: Dict[str, Any]) -> Dict[str, Any]:
                     "type": "text",
                     "data": "請告訴露露你想聊什麼～ 🐱"
                 }
+
+        # ==================== 塔羅牌功能（智能 API + fallback） ====================
+        elif command == "tarot":
+            method = params.get("method", "daily")  # 預設為每日塔羅
+            question = params.get("question")
+            spread_name = params.get("spread_name", "時間之流占卜法")  # fallback 用牌陣
+
+            # 呼叫智能塔羅函數 (優先 API, 失敗自動切換本地)
+            result = tarot_with_fallback(
+                method=method,
+                question=question,
+                spread_name=spread_name
+            )
+
+            if result and result.get("success"):
+                # 無論 API 或本地,都使用 Flex Message (因為格式已統一為 Markdown)
+                try:
+                    reply = process_tarot_daily_reply(result["data"])
+                    return {
+                        "type": "flex",
+                        "data": reply
+                    }
+                except Exception as e:
+                    # 如果 Flex Message 處理失敗,降級為純文字
+                    print(f"Flex Message 處理失敗: {e}")
+                    source_label = "🌐 API" if result["source"] == "api" else "💻 本地"
+                    return {
+                        "type": "text",
+                        "data": f"{source_label} 塔羅解讀\n\n{result['data']}"
+                    }
+            else:
+                return {
+                    "type": "text",
+                    "data": "塔羅占卜發生錯誤，請稍後再試"
+                }
+
+        # ==================== 舊版塔羅功能（已註解） ====================
+        # elif command == "tarot_help":
+        #     # 顯示塔羅占卜詳細說明
+        #     reply = process_tarot_help_reply()
+        #     return {
+        #         "type": "flex",
+        #         "data": reply
+        #     }
+
+        # elif command == "tarot":
+        #     question = params.get("question")
+        #     spread_name = params.get("spread_name", "時間之流占卜法")
+
+        #     # 呼叫塔羅牌功能
+        #     tarot_result = tarot_function(question=question, spread_name=spread_name)
+
+        #     # 處理回覆
+        #     reply = process_tarot_reply(tarot_result)
+        #     return {
+        #         "type": "text",
+        #         "data": reply
+        #     }
 
     except Exception as e:
         print(f"處理命令時發生錯誤: {str(e)}")
