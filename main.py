@@ -9,14 +9,13 @@ import uvicorn
 from dotenv import load_dotenv
 from linebot.v3 import WebhookHandler
 from linebot.v3.messaging import (
-    Configuration,
+    Configuration, ApiClient, MessagingApi, ReplyMessageRequest
 )
 from linebot.v3.webhooks import MessageEvent, TextMessageContent
 
 import os
-from services.linebot_reply.command_handler import handle_command
-from services.linebot_reply.parse_command import parse_command
-from services.linebot_reply.reply_service import ReplyService
+from services.commands import process_message
+from services.message_builder import build_messages_from_result
  
 #測試使用 正式版移除
 import sys
@@ -27,6 +26,10 @@ load_dotenv()
 app = FastAPI()
 handler = WebhookHandler(os.getenv("CHANNEL_SECRET"))
 configuration = Configuration(access_token=os.getenv("CHANNEL_ACCESS_TOKEN"))
+
+# 初始化 LINE Bot API（全局單例）
+api_client = ApiClient(configuration)
+line_bot_api = MessagingApi(api_client)
 
 @app.get("/")
 def read_root():
@@ -46,14 +49,20 @@ def handle_message(event):
     if event.reply_token == "nHuyWiB7yP5Zw52FIkcQobQuGDXCTA":
         print("檢測到測試訊息，跳過回覆")
         return
-    
-    # 解析用戶輸入
-    
-    command, params = parse_command(event.message.text)
-    print(f"解析用戶輸入: {command}, {params}")
-    result = handle_command(command, params)
-    reply_service = ReplyService(configuration)
-    reply_service.reply(event.reply_token, result)
+
+    # 處理訊息（解析 + 處理）
+    result = process_message(event.message.text)
+
+    # 構建並發送訊息
+    if result:
+        messages = build_messages_from_result(result)
+        if messages:
+            line_bot_api.reply_message(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=messages
+                )
+            )
 
 
 

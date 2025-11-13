@@ -19,8 +19,8 @@ RuruBot 是一個基於 LINE Messaging API 開發的 LineBot，使用 FastAPI �
     - 提供每週星座運勢速報，由 AI 分類整理。
 6.  **歌曲推薦** 🎶
     - 從指定的 Spotify 播放清單中隨機推薦歌曲。
-7.  **塔羅牌** 🎶
-    - 從可以使用塔羅牌占卜。
+7.  **塔羅牌** 🔮
+    - 提供多種塔羅牌陣，如時間之流、塞爾特十字等，並可針對問題進行占卜。
 
 ## 如何使用
 
@@ -30,7 +30,7 @@ RuruBot 是一個基於 LINE Messaging API 開發的 LineBot，使用 FastAPI �
 - **星座**：`星座`、`牡羊座`、`週運天秤`
 - **抽籤**：`抽籤`、`淺草`
 - **音樂**：`--ping`
-- **塔羅**：`--塔羅`、`--tarot`
+- **塔羅**：`每日塔羅`、`本日塔羅`、`-塔羅 [問題]`
 - **幫助**：`--help`、`--說明`
 
 ## 技術特點
@@ -39,6 +39,7 @@ RuruBot 是一個基於 LINE Messaging API 開發的 LineBot，使用 FastAPI �
 - 整合 LINE Messaging API
 - 支援 Flex Message 客製化訊息
 - AI 智能分析（使用 Google Gemini）
+- 模組化指令處理架構，易於擴展和維護
 - Docker 容器化部署
 
 ## 開發環境設置
@@ -71,8 +72,9 @@ RuruBot/
 ├── layout/
 │   └── ... # Flex Message 版面配置
 ├── services/
+│   ├── commands/       # 模組化指令處理
 │   ├── features/       # 主要功能模組
-│   └── linebot_reply/  # LINE Bot 回覆處理
+│   └── linebot_reply/  # LINE Bot 回覆處理 (僅包含回覆處理相關)
 ├── statics/
 │   └── ... # 靜態資源
 └── tests/

@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from services.linebot_reply.command_handler import handle_command
+from services.commands import handle_command
 from linebot.v3.messaging import FlexMessage
 
 class TestCommandHandler:
