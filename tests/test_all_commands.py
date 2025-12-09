@@ -12,6 +12,7 @@ test_cases = [
     ("雙子座", "astro"),
     ("金牛座 -w", "astro weekly"),
     ("抽淺草寺", "ticket"),
+    ("抽淺草寺 工作", "ticket with question"),
     ("抽六十甲子籤", "sixty_poem"),
     ("本週國師", "podcast"),
     ("--m", "music"),
@@ -21,6 +22,7 @@ test_cases = [
     ("每日塔羅", "tarot"),
     ("-塔羅 感情運", "tarot with question"),
     ("暈船仔", "dogmeme"),
+    ("每日梗圖", "daily_meme"),
 ]
 
 print("=" * 60)
