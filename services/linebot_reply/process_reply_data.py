@@ -172,13 +172,15 @@ def process_podcast_reply(data):
     title_lines = []
     
 
+    weekly_title_prefixes = ("【本週提醒】", "【本週運勢】", "【本周提醒】", "【本周運勢】")
+
     for i, line in enumerate(lines):
         line = line.strip()
 
-        if line.startswith("【本週提醒】"):
-            # 找到【本週提醒】開頭的行
+        if line.startswith(weekly_title_prefixes):
+            # 找到本週提醒/運勢開頭的行
             title_lines.append(line)
-      
+    
             # 檢查下一行是否也是標題的一部分（不包含【】）
             j = i + 1
             while j < len(lines) and lines[j].strip() and not lines[j].strip().startswith("【"):
@@ -189,18 +191,16 @@ def process_podcast_reply(data):
     
     if title_lines:
         title = " ".join(title_lines)
-     
     else:
-        title = lines[0].strip() if lines else "【本週提醒】"
-      
+        title = lines[0].strip() if lines else "【本週運勢】"
     
-    # 在【本週提醒】後面增加換行
-    if "【本週提醒】" in title:
-        # 找到【本週提醒】的位置
-        reminder_pos = title.find("【本週提醒】")
-        if reminder_pos != -1:
-            # 在【本週提醒】後面插入換行
-            title = title[:reminder_pos + len("【本週提醒】")] + "\n" + title[reminder_pos + len("【本週提醒】"):]
+    # 在本週提醒/運勢後面增加換行
+    for weekly_tag in ["【本週提醒】", "【本週運勢】", "【本周提醒】", "【本周運勢】"]:
+        if weekly_tag in title:
+            pos = title.find(weekly_tag)
+            if pos != -1:
+                title = title[:pos + len(weekly_tag)] + "\n" + title[pos + len(weekly_tag):]
+            break
     
     print(f"最終標題: '{title}'")
     
@@ -565,4 +565,3 @@ def process_music_reply(data: Dict[str, Any]) -> FlexMessage:
                 }
             })
         )
-

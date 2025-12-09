@@ -2,13 +2,16 @@ import requests
 import json
 from bs4 import BeautifulSoup
 from datetime import datetime
+import pytz
 from services.constants import astro, astro_type
 
 
 
 
 def get_astro_info(astro_name: str, type: str):
-    today = datetime.now().strftime("%Y-%m-%d")
+    # 使用台灣時區獲取今天的日期
+    taipei_tz = pytz.timezone('Asia/Taipei')
+    today = datetime.now(taipei_tz).strftime("%Y-%m-%d")
     index = astro[astro_name]
     if type == "weekly":    
         url = f'https://astro.click108.com.tw/weekly_1.php?iAcDay={today}&iType=1&iAstro={index}'

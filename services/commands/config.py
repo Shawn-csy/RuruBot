@@ -22,7 +22,8 @@ from .handlers import (
     handle_help,
     handle_lulu_chat,
     handle_tarot,
-    handle_dogmeme
+    handle_dogmeme,
+    handle_daily_meme
 )
 
 
@@ -114,6 +115,14 @@ COMMAND_CONFIG = {
         "handler": handle_dogmeme,
         "exact_start": True,
         "description": "暈船迷因圖"
+    },
+
+    "daily_meme": {
+        "patterns": ["每日梗圖", "今日梗圖", "每日迷因"],
+        "parse": None,
+        "handler": handle_daily_meme,
+        "exact_start": True,
+        "description": "取得今日梗圖精選"
     }
 }
 

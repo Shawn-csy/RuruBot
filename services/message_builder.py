@@ -2,7 +2,7 @@
 LINE 訊息構建器 - 將業務資料轉換為 LINE 訊息對象
 """
 from linebot.v3.messaging import (
-    TextMessage, ImageMessage, FlexMessage, FlexContainer
+    TextMessage, ImageMessage, FlexMessage, FlexContainer, TemplateMessage
 )
 from typing import Dict, Any, List, Union
 
@@ -50,12 +50,12 @@ def build_flex_message(flex_data: Union[Dict[str, Any], FlexMessage], alt_text: 
     raise TypeError(f"flex_data 必須是 dict 或 FlexMessage，但得到 {type(flex_data)}")
 
 
-def build_messages_from_result(result: Dict[str, Any]) -> List[Union[TextMessage, ImageMessage, FlexMessage]]:
+def build_messages_from_result(result: Dict[str, Any]) -> List[Union[TextMessage, ImageMessage, FlexMessage, TemplateMessage]]:
     """
     從舊的 result 格式構建訊息列表（向後兼容）
 
     Args:
-        result: {"type": "text/image/flex/mixed", "data": ...}
+        result: {"type": "text/image/flex/template/mixed", "data": ...}
 
     Returns:
         LINE 訊息對象列表
@@ -79,6 +79,13 @@ def build_messages_from_result(result: Dict[str, Any]) -> List[Union[TextMessage
     elif result_type == "flex":
         return [build_flex_message(data)]
 
+    elif result_type == "template":
+        # data 已經是 TemplateMessage 對象
+        if isinstance(data, TemplateMessage):
+            return [data]
+        else:
+            return [build_text_message("Template 訊息格式錯誤")]
+
     elif result_type == "mixed":
         # data 是訊息列表
         messages = []
@@ -94,6 +101,11 @@ def build_messages_from_result(result: Dict[str, Any]) -> List[Union[TextMessage
                     msg_data.get("content", {}),
                     msg_data.get("alt_text", "Flex Message")
                 ))
+            elif msg_type == "template":
+                # 處理 template 訊息
+                template_data = msg_data.get("data")
+                if isinstance(template_data, TemplateMessage):
+                    messages.append(template_data)
 
         return messages
 
