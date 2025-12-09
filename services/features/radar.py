@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List
 import requests
+import pytz
 
 
 def radar() -> List[str]:
@@ -14,8 +15,9 @@ def radar() -> List[str]:
         List[str]: 雷達圖 URL 列表
     """
     try:
-        # 獲取當前時間
-        now = datetime.now()
+        # 獲取當前時間 (使用台灣時區)
+        taipei_tz = pytz.timezone('Asia/Taipei')
+        now = datetime.now(taipei_tz)
 
         # 向下取整到最近的 10 分鐘
         # 例如：14:37 -> 14:30, 14:42 -> 14:40

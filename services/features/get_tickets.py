@@ -35,21 +35,41 @@ def locat_ticket (rndNum):
 
 #抽台北市六十甲子籤
 def get_sixty_poem():
-    hit = random.randint(1, 61)
-    url = f"https://iwnet.civil.taipei/SignedPoetry/Home/Detail/{hit}"
-    res = requests.get(url)
-    soup = BeautifulSoup(res.text, 'html.parser')
+    try:
+        hit = random.randint(1, 61)
+        url = f"https://iwnet.civil.taipei/SignedPoetry/Home/Detail/{hit}"
+        # 添加 timeout 避免請求卡住
+        res = requests.get(url, timeout=10)
+        soup = BeautifulSoup(res.text, 'html.parser')
 
-    poetry_div = soup.find('div', class_='main-poetry')
-    poetry_text = poetry_div.get_text('\n', strip=True)
-    process_text = [i.split('\n') for i in poetry_text.split('-')]
-    process_data = []
-    for i in process_text:
-        for j in range(len(i)):
-            process_data.append(i[j])
+        poetry_div = soup.find('div', class_='main-poetry')
+        if not poetry_div:
+            print(f"[六十甲子籤] 找不到詩詞內容")
+            return None, None
 
-    res = '\n'.join(process_data)
-    CHT = soup.find('div', class_='exp-body').get_text()
-    data = [f'第{hit}籤\n',res, '\n',CHT]
+        poetry_text = poetry_div.get_text('\n', strip=True)
+        process_text = [i.split('\n') for i in poetry_text.split('-')]
+        process_data = []
+        for i in process_text:
+            for j in range(len(i)):
+                process_data.append(i[j])
 
-    return data,url
+        res = '\n'.join(process_data)
+        exp_body = soup.find('div', class_='exp-body')
+        if not exp_body:
+            print(f"[六十甲子籤] 找不到解說內容")
+            return None, None
+
+        CHT = exp_body.get_text()
+        data = [f'第{hit}籤\n',res, '\n',CHT]
+
+        return data, url
+    except requests.exceptions.Timeout:
+        print(f"[六十甲子籤] 請求超時")
+        return None, None
+    except requests.exceptions.RequestException as e:
+        print(f"[六十甲子籤] 網路請求錯誤: {e}")
+        return None, None
+    except Exception as e:
+        print(f"[六十甲子籤] 發生錯誤: {e}")
+        return None, None

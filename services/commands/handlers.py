@@ -15,6 +15,9 @@ from services.features.help import get_help_message
 from services.features.gemini_reply import get_gemini_reply
 from services.features.tarot import tarot_with_fallback
 from services.features.dogdog_meme import dogdog_meme
+from services.features.daily_meme import get_daily_meme
+from datetime import datetime
+import pytz
 from services.linebot_reply.process_reply_data import (
     process_astro_bubble_reply,
     process_ticket_reply,
@@ -24,6 +27,7 @@ from services.linebot_reply.process_reply_data import (
     process_help_reply,
     process_tarot_daily_reply
 )
+from services.linebot_reply.process_daily_meme import process_daily_meme_carousel
 
 
 def handle_radar(params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -52,18 +56,26 @@ def handle_astro(params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
 def handle_ticket(params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """處理淺草寺籤命令"""
-    ticket = locat_ticket(random.randint(0, 100))
-    reply = process_ticket_reply(ticket, params.get("text", ""))
-    return {"type": "flex", "data": reply}
+    try:
+        ticket = locat_ticket(random.randint(0, 100))
+        reply = process_ticket_reply(ticket, params.get("text", ""))
+        return {"type": "flex", "data": reply}
+    except Exception as e:
+        print(f"[handle_ticket] 發生錯誤: {e}")
+        return {"type": "text", "data": "抱歉，籤詩服務暫時無法使用，請稍後再試"}
 
 
 def handle_sixty_poem(params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """處理六十甲子籤命令"""
-    data, url = get_sixty_poem()
-    if data and url:
-        reply = process_sixty_poem_reply(data, url, params.get("text", ""))
-        return {"type": "flex", "data": reply}
-    return {"type": "text", "data": "抱歉，無法獲取籤詩資料"}
+    try:
+        data, url = get_sixty_poem()
+        if data and url:
+            reply = process_sixty_poem_reply(data, url, params.get("text", ""))
+            return {"type": "flex", "data": reply}
+        return {"type": "text", "data": "抱歉，無法獲取籤詩資料，請稍後再試"}
+    except Exception as e:
+        print(f"[handle_sixty_poem] 發生錯誤: {e}")
+        return {"type": "text", "data": "抱歉，籤詩服務暫時無法使用，請稍後再試"}
 
 
 def handle_podcast(params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -132,3 +144,23 @@ def handle_tarot(params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
             return {"type": "text", "data": f"{source_label} 塔羅解讀\n\n{result['data']}"}
 
     return {"type": "text", "data": "塔羅占卜發生錯誤，請稍後再試"}
+
+
+def handle_daily_meme(params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """處理每日梗圖命令"""
+    image_urls = get_daily_meme()
+    if image_urls and len(image_urls) > 0:
+        # 獲取今天的日期字串
+        taipei_tz = pytz.timezone('Asia/Taipei')
+        today = datetime.now(taipei_tz)
+        date_str = today.strftime("%Y/%m/%d")
+
+        # 第一則訊息顯示日期,後面是圖片
+        messages = [{"type": "text", "text": f"📅 {date_str} 每日梗圖"}]
+        messages.extend([{"type": "image", "url": url} for url in image_urls])
+
+        return {
+            "type": "mixed",
+            "data": messages
+        }
+    return {"type": "text", "data": "抱歉,今天還沒有梗圖或無法取得"}

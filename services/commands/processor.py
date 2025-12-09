@@ -88,7 +88,7 @@ def handle_command(command: str, params: Dict[str, Any]) -> Optional[Dict[str, A
         print(f"✗ 處理命令 {command} 時發生錯誤: {str(e)}")
         return {
             "type": "text",
-            "data": "處理命令時發生錯誤，請稍後再試"
+            "data": "還沒處理完啦等我一下"
         }
 
 

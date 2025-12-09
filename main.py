@@ -9,7 +9,7 @@ import uvicorn
 from dotenv import load_dotenv
 from linebot.v3 import WebhookHandler
 from linebot.v3.messaging import (
-    Configuration, ApiClient, MessagingApi, ReplyMessageRequest
+    Configuration, ApiClient, MessagingApi, ReplyMessageRequest, PushMessageRequest
 )
 from linebot.v3.webhooks import MessageEvent, TextMessageContent
 
@@ -57,12 +57,36 @@ def handle_message(event):
     if result:
         messages = build_messages_from_result(result)
         if messages:
-            line_bot_api.reply_message(
-                ReplyMessageRequest(
-                    reply_token=event.reply_token,
-                    messages=messages
+            # LINE Reply API 限制最多 5 則訊息
+            # 如果超過 5 則，先用 Reply 發送前 5 則，剩下的用 Push 發送
+            if len(messages) <= 5:
+                line_bot_api.reply_message(
+                    ReplyMessageRequest(
+                        reply_token=event.reply_token,
+                        messages=messages
+                    )
                 )
-            )
+            else:
+                # 先用 Reply 發送前 5 則
+                line_bot_api.reply_message(
+                    ReplyMessageRequest(
+                        reply_token=event.reply_token,
+                        messages=messages[:5]
+                    )
+                )
+
+                # 剩下的訊息用 Push 分批發送（每批最多 5 則）
+                remaining_messages = messages[5:]
+                user_id = event.source.user_id
+
+                for i in range(0, len(remaining_messages), 5):
+                    batch = remaining_messages[i:i+5]
+                    line_bot_api.push_message(
+                        PushMessageRequest(
+                            to=user_id,
+                            messages=batch
+                        )
+                    )
 
 
 

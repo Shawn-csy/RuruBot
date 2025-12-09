@@ -1,5 +1,6 @@
 import requests
 import re
+from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
 import os
@@ -35,6 +36,17 @@ def get_spotify_access_token(client_id, client_secret):
     except Exception as e:
         print(f"獲取access token時發生錯誤: {e}")
         return None
+
+def _parse_release_date(episode):
+    """Parse release date for sorting, fallback to minimal date on error."""
+    date_str = episode.get('release_date')
+    if not date_str:
+        return datetime.min
+    try:
+        return datetime.fromisoformat(date_str)
+    except Exception:
+        return datetime.min
+
 
 def get_podcast():
     """使用Spotify API獲取最新的星座運勢週報"""
@@ -76,23 +88,38 @@ def get_podcast():
         
         data = response.json()
         episodes = data.get('items', [])
+
+        # 按發布日期排序，確保取得最新的集數
+        episodes = sorted(episodes, key=_parse_release_date, reverse=True)
         
         
         
-        # 尋找包含【本週提醒】的最新episode
+        # 尋找包含本週提醒/運勢的最新episode
         weekly_reminder_episode = None
+        reminder_keywords = [
+            "【本週提醒】",
+            "【本周提醒】",
+            "本週提醒",
+            "本周提醒",
+            "【本週運勢】",
+            "【本周運勢】",
+            "本週運勢",
+            "本周運勢",
+        ]
+
         for episode in episodes:
             name = episode.get('name', '')
             description = episode.get('description', '')
-            
-            if "【本週提醒】" in name or "【本週提醒】" in description:
+
+            # Spotify 上的標題可能有「週/周」或缺少中括號，統一視為提醒/運勢集數
+            if any(keyword in name or keyword in description for keyword in reminder_keywords):
                 weekly_reminder_episode = episode
-                print(f"找到【本週提醒】episode: {name}")
+                print(f"找到本週運勢/提醒 episode: {name}")
                 break
-        
+
         if not weekly_reminder_episode:
-            print("未找到【本週提醒】episode")
-            return "國師本週還沒有提醒～"
+            print("未找到本週運勢/提醒 episode")
+            return "國師本週還沒有更新～"
         
         # 提取episode的描述內容和名稱
         episode_description = weekly_reminder_episode.get('description', '')
@@ -151,19 +178,24 @@ def extract_from_raw_content(content, title):
     
     
     # 提取完整的標題（包含episode名稱）
-    # 尋找【本週提醒】開頭的完整標題，直到遇到下一個【】
+    # 尋找本週提醒/運勢開頭的完整標題，直到遇到下一個【】
     # 如果標題已經包含在傳入的title參數中，則直接使用
-    if "【本週提醒】" in title:
-        final_title = title
+    normalized_title = title.replace("本周", "本週")
+    if "本週提醒" in normalized_title or "本週運勢" in normalized_title:
+        final_title = normalized_title
     else:
-        title_match = re.search(r'【本週提醒】[^【]*', content)
+        title_match = re.search(r'【本[週周](提醒|運勢)】[^【]*', content)
+        if not title_match:
+            title_match = re.search(r'本[週周](提醒|運勢)[^【]*', content)
+
         if title_match:
-            final_title = title_match.group(0).strip()
-            # 清理標題，移除多餘的空白
+            final_title = title_match.group(0).replace("本周", "本週").strip()
+            # 確保標題有括號格式
+            if not final_title.startswith("【"):
+                final_title = f"【{final_title}】"
             final_title = re.sub(r'\s+', ' ', final_title)
-            
         else:
-            final_title = "【本週提醒】"
+            final_title = "【本週運勢】"
            
     
     # 提取各個分類的星座運勢
@@ -213,4 +245,3 @@ def extract_from_raw_content(content, title):
     
     
     return final_result
-
