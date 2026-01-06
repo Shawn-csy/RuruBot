@@ -37,7 +37,7 @@ class SpotifyService:
         }
         
         try:
-            response = requests.post(url, headers=headers, data=data)
+            response = requests.post(url, headers=headers, data=data, timeout=10)
             response.raise_for_status()  # 檢查 HTTP 錯誤
             
             token_data = response.json()
@@ -63,7 +63,7 @@ class SpotifyService:
                 "Authorization": f"Bearer {token}"
             }
             
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, timeout=10)
             response.raise_for_status()
             data = response.json()
             
@@ -101,7 +101,7 @@ class SpotifyService:
 
             # 獲取用戶的歌單
             playlists_url = "https://api.spotify.com/v1/me/playlists"
-            playlists_response = requests.get(playlists_url, headers=headers, params={"limit": 50})
+            playlists_response = requests.get(playlists_url, headers=headers, params={"limit": 50}, timeout=20)
 
             if playlists_response.status_code != 200:
                 return {"error": f"無法獲取歌單: {playlists_response.status_code}"}
@@ -118,7 +118,7 @@ class SpotifyService:
 
             # 獲取歌單中的歌曲
             tracks_url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-            tracks_response = requests.get(tracks_url, headers=headers, params={"limit": 100})
+            tracks_response = requests.get(tracks_url, headers=headers, params={"limit": 100}, timeout=20)
 
             if tracks_response.status_code != 200:
                 return {"error": f"無法獲取歌單歌曲: {tracks_response.status_code}"}
@@ -185,7 +185,7 @@ class SpotifyService:
 
             # 獲取歌單資訊
             playlist_info_url = f"https://api.spotify.com/v1/playlists/{playlist_id}"
-            playlist_info_response = requests.get(playlist_info_url, headers=headers)
+            playlist_info_response = requests.get(playlist_info_url, headers=headers, timeout=20)
 
             if playlist_info_response.status_code != 200:
                 return {"error": f"無法獲取歌單資訊: {playlist_info_response.status_code}"}
@@ -194,7 +194,7 @@ class SpotifyService:
 
             # 獲取歌單中的歌曲
             tracks_url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-            tracks_response = requests.get(tracks_url, headers=headers, params={"limit": 100})
+            tracks_response = requests.get(tracks_url, headers=headers, params={"limit": 100}, timeout=20)
 
             if tracks_response.status_code != 200:
                 return {"error": f"無法獲取歌單歌曲: {tracks_response.status_code}"}
@@ -240,7 +240,7 @@ class SpotifyService:
                 "limit": 50  # 獲取最多 50 個歌單
             }
 
-            response = requests.get(url, headers=headers, params=params)
+            response = requests.get(url, headers=headers, params=params, timeout=20)
 
             if response.status_code != 200:
                 print(f"無法獲取用戶 {user_id} 的歌單: {response.status_code}")
@@ -302,7 +302,7 @@ class SpotifyService:
             }
 
             tracks_url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-            tracks_response = requests.get(tracks_url, headers=headers, params={"limit": 100})
+            tracks_response = requests.get(tracks_url, headers=headers, params={"limit": 100}, timeout=20)
 
             if tracks_response.status_code != 200:
                 return {"error": f"無法獲取歌單歌曲: {tracks_response.status_code}"}

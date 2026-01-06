@@ -18,7 +18,13 @@ def get_astro_info(astro_name: str, type: str):
     elif type == "daily":
         url = f'https://astro.click108.com.tw/daily_0.php?iAstro={index}&iAcDay={today}'
 
-    res = requests.get(url)
+    try:
+        res = requests.get(url, timeout=10)
+    except requests.Timeout:
+        return ["連線超時，請稍後再試"]
+    except Exception as e:
+        print(f"Error fetching astro: {e}")
+        return ["無法獲取星座運勢"]
     soup = BeautifulSoup(res.text, 'html.parser')
     today_word_elements = soup.find_all('div', class_='TODAY_WORD', )
     todayFeature = soup.find_all('div', class_='TODAY_CONTENT')

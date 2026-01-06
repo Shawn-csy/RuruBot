@@ -23,7 +23,7 @@ def get_spotify_access_token(client_id, client_secret):
             'grant_type': 'client_credentials'
         }
         
-        response = requests.post(token_url, headers=headers, data=data)
+        response = requests.post(token_url, headers=headers, data=data, timeout=10)
         
         if response.status_code == 200:
             token_data = response.json()
@@ -79,7 +79,7 @@ def get_podcast():
         }
         
         print("正在從Spotify API獲取episode列表...")
-        response = requests.get(api_url, headers=headers, params=params)
+        response = requests.get(api_url, headers=headers, params=params, timeout=20)
         
         if response.status_code != 200:
             print(f"API請求失敗，狀態碼: {response.status_code}")
