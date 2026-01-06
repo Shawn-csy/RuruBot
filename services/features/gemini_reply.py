@@ -22,7 +22,7 @@ def get_gemini_reply(prompt, system_prompt=None, timeout=15):
 
         # Gemini API 調用 (Google genai SDK 會自動處理超時)
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3-flash-preview",
             contents=system_prompt + prompt
         )
         return response.text
