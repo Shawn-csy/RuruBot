@@ -35,12 +35,18 @@ line_bot_api = MessagingApi(api_client)
 def read_root():
     return {"message": "Hello, World!"}
 
+import asyncio
+
 @app.post("/callback")
 async def callback(request: Request):
     body_bytes = await request.body()
     body = body_bytes.decode('utf-8')
     signature = request.headers.get("X-Line-Signature")
-    handler.handle(body, signature)
+    
+    # Run the synchronous handler in a thread pool to avoid blocking the async event loop
+    loop = asyncio.get_event_loop()
+    await loop.run_in_executor(None, lambda: handler.handle(body, signature))
+    
     return "OK"
 
 @handler.add(MessageEvent, message=TextMessageContent)
