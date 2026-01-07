@@ -19,12 +19,13 @@ def get_astro_info(astro_name: str, type: str):
     elif type == "daily":
         url = f'https://astro.click108.com.tw/daily_0.php?iAstro={index}&iAcDay={today}'
 
-    max_retries = 3
+    max_retries = 5
     for attempt in range(max_retries):
         try:
             res = requests.get(url, timeout=15)
             if res.status_code != 200:
                 print(f"Attempt {attempt + 1}: HTTP {res.status_code}")
+                time.sleep(2 * (attempt + 1))
                 continue
 
             soup = BeautifulSoup(res.text, 'html.parser')
@@ -49,6 +50,8 @@ def get_astro_info(astro_name: str, type: str):
             print(f"Attempt {attempt + 1}: {e}")
             
         if attempt < max_retries - 1:
-            time.sleep(2)
+            wait_time = 2 * (attempt + 1)
+            print(f"Waiting {wait_time}s before next retry...")
+            time.sleep(wait_time)
             
-    return ["無法獲取星座運勢，請稍後再試"]
+    return [f"無法獲取星座運勢 (嘗試{max_retries}次失敗)，請稍後再試"]

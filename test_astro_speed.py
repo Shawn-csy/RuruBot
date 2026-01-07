@@ -21,8 +21,9 @@ for name in astro.keys():
         data = get_astro_info(name, "daily")
         duration = time.time() - start
         
-        if data and "無法獲取" not in data and "連線超時" not in data:
+        if data and "無法獲取" not in data[0] and "連線超時" not in data[0]:
             print(f" Done ({duration:.2f}s)")
+            print(f"   Preview: {data[0][:30]}...") # Print first 30 chars
             success_count += 1
         else:
             print(f" Failed ({duration:.2f}s) - {data[0] if data else 'Unknown error'}")
