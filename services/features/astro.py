@@ -1,10 +1,13 @@
 import requests
+import urllib3
 import time
 import json
 from bs4 import BeautifulSoup
 from datetime import datetime
 import pytz
 from services.constants import astro, astro_type
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 
@@ -22,7 +25,7 @@ def get_astro_info(astro_name: str, type: str):
     max_retries = 5
     for attempt in range(max_retries):
         try:
-            res = requests.get(url, timeout=15)
+            res = requests.get(url, timeout=15, verify=False)
             if res.status_code != 200:
                 print(f"Attempt {attempt + 1}: HTTP {res.status_code}")
                 time.sleep(2 * (attempt + 1))
