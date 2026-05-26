@@ -218,12 +218,13 @@ def extract_from_raw_content(content, title):
             zodiac_signs = ["牡羊", "金牛", "雙子", "巨蟹", "獅子", "處女", "天秤", "天蠍", "射手", "魔羯", "水瓶", "雙魚"]
             
             # 在分類內容中尋找每個星座
+            zodiac_signs_pattern = "|".join(zodiac_signs)
             for zodiac in zodiac_signs:
                 if zodiac in category_content:
                     # 找到該星座的運勢描述
                     # 使用更精確的正則表達式，確保只匹配當前星座的運勢
                     # 格式：星座：運勢內容（到下一個星座或分類結束）
-                    zodiac_pattern = rf'{zodiac}：([^】]+?)(?=\s*[^：\s]+：|$)'
+                    zodiac_pattern = rf'{zodiac}：(.+?)(?=\s*(?:{zodiac_signs_pattern})：|$)'
                     zodiac_match = re.search(zodiac_pattern, category_content)
                     if zodiac_match:
                         fortune = zodiac_match.group(1).strip()
