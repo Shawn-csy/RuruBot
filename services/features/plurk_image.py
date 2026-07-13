@@ -1,7 +1,5 @@
 import os
-from dotenv import load_dotenv
 from plurk_oauth import PlurkAPI
-load_dotenv()
 
 #Plurk Part
 CONSUMER_KEY = os.getenv('plurk_App_key')

@@ -1,11 +1,16 @@
 from google import genai
 import os
-from dotenv import load_dotenv
 from services.constants import gemini_system_prompt
 
-load_dotenv()
+_client: genai.Client | None = None
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+def _get_client() -> genai.Client:
+    global _client
+    if _client is None:
+        _client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+    return _client
+
 
 def get_gemini_reply(prompt, system_prompt=None, timeout=15):
     """
@@ -20,8 +25,7 @@ def get_gemini_reply(prompt, system_prompt=None, timeout=15):
         if system_prompt is None:
             system_prompt = gemini_system_prompt
 
-        # Gemini API 調用 (Google genai SDK 會自動處理超時)
-        response = client.models.generate_content(
+        response = _get_client().models.generate_content(
             model="gemini-3-flash-preview",
             contents=system_prompt + prompt
         )

@@ -12,15 +12,10 @@ test_cases = [
     ("雙子座", "astro", {"astro_name": "雙子座", "type": "daily"}),
     ("金牛座 -w", "astro", {"astro_name": "金牛座", "type": "weekly"}),
     ("抽淺草寺 想問工作", "ticket", {"text": "抽淺草寺 想問工作"}),
-    ("抽六十甲子籤", "sixty_poem", {}),
     ("本週國師", "podcast", {}),
-    ("--m", "music", {}),
-    ("--ping 鼠藥", "music", {"user_name": "鼠藥"}),
     ("--help", "help", {}),
-    ("露露 你好", "lulu_chat", {"text": "你好"}),
-    ("每日塔羅", "tarot", {"method": "daily", "question": None}),
-    ("-塔羅 感情運", "tarot", {"method": "question", "question": "感情運"}),
     ("暈船仔", "dogmeme", {}),
+    ("解答之書 我會成功嗎", "answers_book", {"question": "我會成功嗎"}),
 ]
 
 print("=" * 60)

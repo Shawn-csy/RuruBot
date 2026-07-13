@@ -1,5 +1,7 @@
 fastapi
 uvicorn
+pytest
+httpx
 line-bot-sdk
 python-dotenv
 google-genai
