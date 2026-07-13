@@ -6,6 +6,7 @@
 from services.constants import astro as astro_dict
 from .parsers import (
     parse_astro_params,
+    parse_astro_weekly_flag_params,
     parse_ticket_params,
     parse_sixty_poem_params,
     parse_music_params,
@@ -51,6 +52,14 @@ COMMAND_CONFIG = {
         "handler": handle_astro,
         "exact_start": True,
         "description": "查詢星座運勢"
+    },
+
+    "astro_weekly": {
+        "patterns": ["-w"],
+        "parse": parse_astro_weekly_flag_params,
+        "handler": handle_astro,
+        "exact_start": True,
+        "description": "查詢星座每週運勢（-w 星座名）"
     },
 
     "ticket": {
