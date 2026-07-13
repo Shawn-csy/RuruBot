@@ -8,23 +8,16 @@ from .parsers import (
     parse_astro_params,
     parse_astro_weekly_flag_params,
     parse_ticket_params,
-    parse_sixty_poem_params,
-    parse_music_params,
-    parse_lulu_chat_params,
-    parse_tarot_params
+    parse_answers_book_params,
 )
 from .handlers import (
     handle_radar,
     handle_astro,
     handle_ticket,
-    handle_sixty_poem,
     handle_podcast,
-    handle_music,
     handle_help,
-    handle_lulu_chat,
-    handle_tarot,
     handle_dogmeme,
-    handle_daily_meme
+    handle_answers_book,
 )
 
 
@@ -70,28 +63,12 @@ COMMAND_CONFIG = {
         "description": "抽淺草寺籤"
     },
 
-    "sixty_poem": {
-        "patterns": ["抽六十甲子籤"],
-        "parse": parse_sixty_poem_params,
-        "handler": handle_sixty_poem,
-        "exact_start": True,
-        "description": "抽六十甲子籤"
-    },
-
     "podcast": {
         "patterns": ["本週國師"],
         "parse": None,
         "handler": handle_podcast,
         "exact_start": True,
         "description": "本週國師運勢"
-    },
-
-    "music": {
-        "patterns": ["--m", "--ping"],
-        "parse": parse_music_params,
-        "handler": handle_music,
-        "exact_start": True,
-        "description": "音樂推薦"
     },
 
     "help": {
@@ -102,22 +79,6 @@ COMMAND_CONFIG = {
         "description": "使用說明"
     },
 
-    "lulu_chat": {
-        "patterns": ["露露"],
-        "parse": parse_lulu_chat_params,
-        "handler": handle_lulu_chat,
-        "exact_start": True,
-        "description": "與露露對話"
-    },
-
-    "tarot": {
-        "patterns": ["每日塔羅", "本日塔羅", "-塔羅"],
-        "parse": parse_tarot_params,
-        "handler": handle_tarot,
-        "exact_start": True,
-        "description": "塔羅占卜"
-    },
-
     "dogmeme": {
         "patterns": ["暈船仔", "暈船"],
         "parse": None,
@@ -126,13 +87,14 @@ COMMAND_CONFIG = {
         "description": "暈船迷因圖"
     },
 
-    "daily_meme": {
-        "patterns": ["每日梗圖", "今日梗圖", "每日迷因"],
-        "parse": None,
-        "handler": handle_daily_meme,
+    "answers_book": {
+        "patterns": ["解答之書"],
+        "parse": parse_answers_book_params,
+        "handler": handle_answers_book,
         "exact_start": True,
-        "description": "取得今日梗圖精選"
-    }
+        "description": "解答之書（隨機抽一條答案）"
+    },
+
 }
 
 

@@ -1,5 +1,9 @@
 import pytest
-from services.commands.parsers import parse_astro_params, parse_astro_weekly_flag_params
+from services.commands.parsers import (
+    parse_answers_book_params,
+    parse_astro_params,
+    parse_astro_weekly_flag_params,
+)
 from services.commands.processor import parse_command
 
 
@@ -76,3 +80,20 @@ class TestParseCommandAstro:
         """astro 和 astro_weekly 應指向同一個 handler"""
         from services.commands.config import COMMAND_CONFIG
         assert COMMAND_CONFIG["astro"]["handler"] is COMMAND_CONFIG["astro_weekly"]["handler"]
+
+
+class TestParseAnswersBook:
+    """parse_answers_book_params / parse_command 解答之書"""
+
+    def test_extracts_question(self):
+        result = parse_answers_book_params("解答之書 我會成功嗎")
+        assert result == {"question": "我會成功嗎"}
+
+    def test_empty_question_allowed(self):
+        result = parse_answers_book_params("解答之書")
+        assert result == {"question": ""}
+
+    def test_parse_command(self):
+        cmd, params = parse_command("解答之書 要不要出門")
+        assert cmd == "answers_book"
+        assert params == {"question": "要不要出門"}

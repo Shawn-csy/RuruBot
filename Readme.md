@@ -13,34 +13,55 @@ RuruBot 是一個基於 LINE Messaging API 開發的 LineBot，使用 FastAPI �
     - 查詢 12 星座的日運、週運，並提供完整的運勢分析。
 3.  **淺草寺抽籤** 🎋
     - 提供電子淺草寺觀音籤，並附有 AI 解籤服務。
-4.  **六十甲子籤** 🎯
-    - 提供傳統六十甲子籤詩，並附有 AI 智能解籤。
-5.  **國師運勢** 📻
+4.  **國師運勢** 📻
     - 提供每週星座運勢速報，由 AI 分類整理。
-6.  **歌曲推薦** 🎶
-    - 從指定的 Spotify 播放清單中隨機推薦歌曲。
-7.  **塔羅牌** 🔮
-    - 提供多種塔羅牌陣，如時間之流、塞爾特十字等，並可針對問題進行占卜。
+5.  **暈船迷因** 🐶
+    - 隨機取得暈船迷因圖。
+6.  **解答之書** 📖
+    - 向解答之書提問，隨機得到一個答案。
+7.  **使用說明** ℹ️
+    - 顯示目前支援的所有指令。
+
+目前保留服務：氣象雷達、星座運勢、淺草寺抽籤、本週國師、暈船迷因、解答之書、使用說明。
+六十甲子、音樂推薦、露露聊天、塔羅、每日梗圖已暫停，底層檔案暫時保留待確認後清除。
 
 ## 如何使用
 
 大部分功能支援透過關鍵字觸發：
 
-- **天氣**：`雷達`、`radar` //維修中
-- **星座**：`星座`、`牡羊座`、`週運天秤`
-- **抽籤**：`抽籤`、`淺草`
-- **音樂**：`--ping`
-- **塔羅**：`每日塔羅`、`本日塔羅`、`-塔羅 [問題]`
-- **幫助**：`--help`、`--說明`
+- **天氣**：`雷達`、`radar`
+- **星座**：`牡羊座`、`-w 牡羊座`（週運）
+- **抽籤**：`抽淺草寺`
+- **國師**：`本週國師`
+- **迷因**：`暈船仔`、`暈船`
+- **解答之書**：`解答之書 我會成功嗎`
+- **幫助**：`--help`
 
 ## 技術特點
 
-- 使用 FastAPI 建構 Web 服務
-- 整合 LINE Messaging API
-- 支援 Flex Message 客製化訊息
-- AI 智能分析（使用 Google Gemini）
-- 模組化指令處理架構，易於擴展和維護
+- FastAPI 後端，支援 LINE Webhook 與 REST API 雙入口
+- 核心功能（use case）不依賴 LINE SDK，可被多種 client 共用
+- 外部 API client（Gemini）lazy init，import 時不建立連線
+- 指令解析、業務邏輯、LINE 呈現分層，各層職責明確
 - Docker 容器化部署
+
+## 架構方向
+
+RuruBot 的長期方向是把核心功能整理成可被多種 client 呼叫的後端服務。LINE Bot 會是其中一個 adapter，未來也可以新增 Web 前端透過 API 取得同一份資料。
+
+詳細說明請參考 [architecture.md](./docs/architecture.md)。
+實作遷移步驟請參考 [refactor_plan.md](./docs/refactor_plan.md)。
+
+## REST API
+
+目前已上線：
+
+```text
+GET /api/astro?sign=牡羊座&type=daily
+GET /api/astro?sign=牡羊座&type=weekly
+```
+
+回傳 JSON-native 結構，可直接給 Web 前端使用。
 
 ## 開發環境設置
 
@@ -62,42 +83,36 @@ RuruBot 是一個基於 LINE Messaging API 開發的 LineBot，使用 FastAPI �
 
 ```
 RuruBot/
-├── Dockerfile
-├── main.py
-├── requirements.txt
-├── Readme.md
-├── .env # 環境變數
-├── docs/
-│   └── changelog.md
-├── layout/
-│   └── ... # Flex Message 版面配置
+├── main.py               # FastAPI app 入口
+├── api/
+│   └── routes.py         # REST API endpoints
 ├── services/
-│   ├── commands/       # 模組化指令處理
-│   ├── features/       # 主要功能模組
-│   └── linebot_reply/  # LINE Bot 回覆處理 (僅包含回覆處理相關)
-├── statics/
-│   └── ... # 靜態資源
+│   ├── adapters/         # LINE webhook / sender adapter
+│   ├── commands/         # 指令解析與路由（config / parsers / handlers / processor）
+│   ├── use_cases/        # 核心功能邏輯（不依賴 LINE SDK）
+│   ├── features/         # 外部資料來源（含部分暫停服務殘留）
+│   └── linebot_reply/    # LINE presenter（domain result → FlexMessage）
+├── layout/               # Flex Message bubble builder
+├── statics/              # 靜態資源（籤詩 JSON 等）
+├── docs/                 # 架構文件
 └── tests/
-    └── ... # 測試
+    ├── use_cases/        # use case 單元測試（不打外部 API）
+    ├── features/         # command parser / handler 測試
+    ├── api/              # REST API 整合測試
+    ├── adapters/         # LINE sender / webhook 測試
+    ├── commands/         # LINE webhook callback 測試
+    └── manual/           # 需要真實 API key 的手動測試（不自動執行）
+        └── suspended/    # 暫停服務的手動/歷史測試
 ```
 
 ## 測試
 
-執行所有測試：
-
 ```bash
-python -m tests.run_tests
+.venv/bin/pytest -q
 ```
 
-執行特定測試：
-
-```bash
-# 執行功能測試
-pytest tests/features/
-
-# 執行指令測試
-pytest tests/commands/
-```
+預設測試不需要真實 API key，全部 mock 外部服務。`tests/manual/` 下的手動測試不會被自動執行。
+目前預設測試排除暫停服務的手動/歷史測試。
 
 ## 部署
 
