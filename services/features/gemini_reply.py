@@ -13,14 +13,14 @@ def _get_client() -> genai.Client:
     return _client
 
 
-def get_gemini_reply(prompt, system_prompt=None, timeout=8):
+def get_gemini_reply(prompt, system_prompt=None, timeout=10):
     """
     獲取 Gemini AI 回覆
 
     Args:
         prompt: 用戶輸入的內容
         system_prompt: 自定義的系統提示，如果不提供則使用預設的
-        timeout: API 請求超時時間 (秒)，預設 8 秒，超時走 except 回退
+        timeout: API 請求超時時間 (秒)，預設 10 秒（API 要求 deadline 最低 10 秒），超時走 except 回退
     """
     try:
         if system_prompt is None:
