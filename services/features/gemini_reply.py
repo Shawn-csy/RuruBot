@@ -1,4 +1,5 @@
 from google import genai
+from google.genai import types
 import os
 from services.constants import gemini_system_prompt
 
@@ -12,22 +13,25 @@ def _get_client() -> genai.Client:
     return _client
 
 
-def get_gemini_reply(prompt, system_prompt=None, timeout=15):
+def get_gemini_reply(prompt, system_prompt=None, timeout=8):
     """
     獲取 Gemini AI 回覆
 
     Args:
         prompt: 用戶輸入的內容
         system_prompt: 自定義的系統提示，如果不提供則使用預設的
-        timeout: API 請求超時時間 (秒)，預設 15 秒 (目前未使用,保留參數以便未來擴展)
+        timeout: API 請求超時時間 (秒)，預設 8 秒，超時走 except 回退
     """
     try:
         if system_prompt is None:
             system_prompt = gemini_system_prompt
 
         response = _get_client().models.generate_content(
-            model="gemini-3-flash-preview",
-            contents=system_prompt + prompt
+            model="gemini-3.1-flash-lite",
+            contents=system_prompt + prompt,
+            config=types.GenerateContentConfig(
+                http_options=types.HttpOptions(timeout=timeout * 1000)
+            ),
         )
         return response.text
     except Exception as e:
