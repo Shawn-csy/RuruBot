@@ -8,12 +8,13 @@ from services.features.get_tickets import locat_ticket
 from services.features.gemini_reply import get_gemini_reply
 
 
-def get_ticket_result(question: str = "") -> dict:
+def get_ticket_result(question: str = "", with_ai: bool = True) -> dict:
     """
     抽一支淺草寺籤並取得解籤結果。
 
     Args:
         question: 使用者的問題（可為空）
+        with_ai: 是否呼叫 Gemini 解籤。LINE 指令維持 True；REST API 可用 False 快速回籤詩。
 
     Returns:
         {
@@ -31,10 +32,12 @@ def get_ticket_result(question: str = "") -> dict:
         ticket_data, img_url = locat_ticket(random.randint(0, 99))
         title, ticket_type, poem, explain, result = ticket_data
 
-        if question:
+        if question and with_ai:
             ai_result = get_gemini_reply(
                 "問題 " + question + " 籤詩結果 " + title + poem + explain + result
             )
+        elif question:
+            ai_result = ""
         else:
             ai_result = "喵？"
 

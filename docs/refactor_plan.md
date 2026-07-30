@@ -435,6 +435,5 @@ services/clients/
 
 ## Backlog（未執行，不緊急）
 
-- `/api/radar`、`/api/ticket`、`/api/podcast`、`/api/answers-book` REST API
 - `plurk_image.py` import-time PlurkAPI 初始化改 lazy（每日梗圖服務暫停，不急）
 - 暫停服務底層檔案（`spotify_service.py`、`tarot.py`、`daily_meme.py` 等）確認無引用後刪除
