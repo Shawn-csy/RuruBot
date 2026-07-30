@@ -44,6 +44,14 @@ def test_calls_gemini_when_question():
     assert "感情運如何" in call_arg
 
 
+def test_skips_gemini_when_with_ai_false():
+    with patch("services.use_cases.ticket.locat_ticket", return_value=MOCK_TICKET_DATA), \
+         patch("services.use_cases.ticket.get_gemini_reply") as mock_gemini:
+        result = get_ticket_result("感情運如何", with_ai=False)
+    assert result["ai_result"] == ""
+    mock_gemini.assert_not_called()
+
+
 def test_returns_all_required_keys():
     with patch("services.use_cases.ticket.locat_ticket", return_value=MOCK_TICKET_DATA):
         result = get_ticket_result("")

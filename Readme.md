@@ -59,9 +59,24 @@ RuruBot 的長期方向是把核心功能整理成可被多種 client 呼叫的�
 ```text
 GET /api/astro?sign=牡羊座&type=daily
 GET /api/astro?sign=牡羊座&type=weekly
+GET /api/radar
+POST /api/ticket
+GET /api/podcast
+POST /api/answers-book
+GET /api/help
 ```
 
 回傳 JSON-native 結構，可直接給 Web 前端使用。
+`POST /api/ticket` 是純資料 API，固定不呼叫 Gemini；AI 解籤只保留在 LINE Bot 內部流程。
+
+## Health Check
+
+```text
+GET /healthz  # 輕量 liveness，確認服務有回應
+GET /readyz   # readiness，檢查必要環境變數與本地資料檔
+```
+
+Health endpoints 不呼叫 Gemini、Spotify、LINE 等外部服務，避免外部服務抖動時被誤判為 Cloud Run instance 不健康。
 
 ## 開發環境設置
 
@@ -77,6 +92,7 @@ GET /api/astro?sign=牡羊座&type=weekly
     LINE_CHANNEL_ACCESS_TOKEN=your_access_token
     LINE_CHANNEL_SECRET=your_channel_secret
     GEMINI_API_KEY=your_gemini_api_key
+    CORS_ALLOW_ORIGINS=*  # 可改成正式前端網域，多個網域用逗號分隔
     ```
 
 ## 專案結構

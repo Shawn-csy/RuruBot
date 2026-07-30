@@ -201,7 +201,14 @@ Frontend fetch()
 ```text
 GET  /api/astro?sign=牡羊座&type=daily
 GET  /api/astro?sign=牡羊座&type=weekly
+GET  /api/radar
+POST /api/ticket
+GET  /api/podcast
+POST /api/answers-book
+GET  /api/help
 ```
+
+`POST /api/ticket` 是公開前端使用的純資料 API，固定不呼叫 Gemini。AI 解籤只保留在 LINE Bot 內部流程，避免公開網站被刷 AI 成本。
 
 回傳範例：
 
@@ -221,9 +228,19 @@ GET  /api/astro?sign=牡羊座&type=weekly
 
 ## 待辦
 
-- 其他保留服務的 REST API（`/api/radar`、`/api/ticket`、`/api/podcast`、`/api/answers-book`）
 - `plurk_image.py` import-time `PlurkAPI` 初始化改 lazy（目前每日梗圖服務已暫停，不急）
 - 暫停服務底層檔案（`spotify_service.py`、`tarot.py` 等）確認無引用後刪除
+
+## Health Endpoints
+
+```text
+GET /healthz
+GET /readyz
+```
+
+- `/healthz` 是輕量 liveness，只確認服務有回應。
+- `/readyz` 檢查必要環境變數與本地資料檔。
+- health endpoints 不呼叫外部 API，避免 Gemini、Spotify、LINE 短暫異常時讓 Cloud Run 誤判 instance 不健康。
 
 ## 判斷原則
 
