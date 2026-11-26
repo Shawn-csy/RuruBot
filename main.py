@@ -1,11 +1,15 @@
 import os
-from fastapi import FastAPI
+from pathlib import Path
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 
 load_dotenv()  # 必須在 adapter import 之前，adapter 建構時需要 env var
 
 from api.routes import router as api_router
+from middlewares.rate_limit import ApiRateLimitMiddleware
 from services.adapters.line_webhook import get_handler, callback
 
 app = FastAPI()
@@ -17,9 +21,47 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(ApiRateLimitMiddleware)
 app.include_router(api_router)
 
-app.get("/")(lambda: {"message": "Hello, World!"})
+FRONTEND_DIST = Path(__file__).parent / "frontend" / "dist"
+if (FRONTEND_DIST / "assets").is_dir():
+    app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
+if (FRONTEND_DIST / "pixel-worlds").is_dir():
+    app.mount(
+        "/pixel-worlds",
+        StaticFiles(directory=FRONTEND_DIST / "pixel-worlds"),
+        name="pixel-worlds",
+    )
+if (FRONTEND_DIST / "images").is_dir():
+    app.mount(
+        "/images",
+        StaticFiles(directory=FRONTEND_DIST / "images"),
+        name="images",
+    )
+
+
+@app.get("/")
+@app.get("/about")
+@app.get("/guide")
+def read_root():
+    index_file = FRONTEND_DIST / "index.html"
+    if index_file.is_file():
+        return FileResponse(index_file)
+    return {"message": "Hello, World!"}
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+@app.get("/favicon-32x32.png", include_in_schema=False)
+@app.get("/apple-touch-icon.png", include_in_schema=False)
+@app.get("/robots.txt", include_in_schema=False)
+@app.get("/sitemap.xml", include_in_schema=False)
+def read_public_root_file(request: Request):
+    filename = request.url.path.lstrip("/")
+    target = FRONTEND_DIST / filename
+    if target.is_file():
+        return FileResponse(target)
+    raise HTTPException(status_code=404, detail="Not found")
 
 
 @app.get("/healthz")
